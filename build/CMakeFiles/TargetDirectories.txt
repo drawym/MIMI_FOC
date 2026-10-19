@@ -1,0 +1,3 @@
+D:/100W/MY_PRO/MIMI-FOC/build/CMakeFiles/at32_app.elf.dir
+D:/100W/MY_PRO/MIMI-FOC/build/CMakeFiles/edit_cache.dir
+D:/100W/MY_PRO/MIMI-FOC/build/CMakeFiles/rebuild_cache.dir

@@ -1,0 +1,7 @@
+{
+    "cmake.generator": "Ninja",
+    "cmake.configureArgs": [
+        "-DCMAKE_MAKE_PROGRAM=D:/Tool_ARM/ninja/ninja.exe",
+        "-DCMAKE_BUILD_TYPE=Debug"
+    ]
+}
