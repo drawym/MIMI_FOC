@@ -54,7 +54,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/cmsis/cm4/device_support/system_at32
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\cmsis\cm4\device_support\system_at32f435_437.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\cmsis\cm4\device_support
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -64,7 +64,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/cmsis/cm4/device_support/startup/gcc
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\cmsis\cm4\device_support\startup\gcc\startup_at32f435_437.s.obj.d
   FLAGS = -g -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\cmsis\cm4\device_support\startup\gcc
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -74,7 +74,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_acc.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_acc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -84,7 +84,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_adc.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_adc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -94,7 +94,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_can.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_can.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -104,7 +104,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_crc.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_crc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -114,7 +114,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_crm.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_crm.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -124,7 +124,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dac.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_dac.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -134,7 +134,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_debug.c.obj
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_debug.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -144,7 +144,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dma.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_dma.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -154,7 +154,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dvp.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_dvp.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -164,7 +164,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_edma.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_edma.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -174,7 +174,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_emac.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_emac.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -184,7 +184,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_ertc.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_ertc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -194,7 +194,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_exint.c.obj
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_exint.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -204,7 +204,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_flash.c.obj
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_flash.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -214,7 +214,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_gpio.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_gpio.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -224,7 +224,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_i2c.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_i2c.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -234,7 +234,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_misc.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_misc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -244,7 +244,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_pwc.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_pwc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -254,7 +254,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_qspi.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_qspi.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -264,7 +264,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_scfg.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_scfg.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -274,7 +274,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_sdio.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_sdio.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -284,7 +284,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_spi.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_spi.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -294,7 +294,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_tmr.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_tmr.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -304,7 +304,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_usart.c.obj
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_usart.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -314,7 +314,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_usb.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_usb.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -324,7 +324,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_wdt.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_wdt.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -334,7 +334,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_wwdt.c.obj:
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_wwdt.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -344,7 +344,7 @@ build CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_xmc.c.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\libraries\drivers\src\at32f435_437_xmc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\libraries\drivers\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -354,7 +354,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/clock.c.obj: C_COMPILER__at32_ap
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\clock.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -364,7 +364,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/components.c.obj: C_COMPILER__at
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\components.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -374,7 +374,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/cpu.c.obj: C_COMPILER__at32_app.
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\cpu.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -384,7 +384,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/idle.c.obj: C_COMPILER__at32_app
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\idle.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -394,7 +394,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/ipc.c.obj: C_COMPILER__at32_app.
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\ipc.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -404,7 +404,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/irq.c.obj: C_COMPILER__at32_app.
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\irq.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -414,7 +414,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/kservice.c.obj: C_COMPILER__at32
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\kservice.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -424,7 +424,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/mem.c.obj: C_COMPILER__at32_app.
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\mem.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -434,7 +434,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/object.c.obj: C_COMPILER__at32_a
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\object.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -444,7 +444,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/scheduler.c.obj: C_COMPILER__at3
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\scheduler.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -454,7 +454,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/thread.c.obj: C_COMPILER__at32_a
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\thread.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -464,7 +464,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/src/timer.c.obj: C_COMPILER__at32_ap
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\src\timer.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -474,7 +474,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/libcpu/cortex-m4/context_gcc.S.obj: 
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\libcpu\cortex-m4\context_gcc.S.obj.d
   FLAGS = -g -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\libcpu\cortex-m4
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -484,7 +484,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/libcpu/cortex-m4/cpuport.c.obj: C_CO
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\libcpu\cortex-m4\cpuport.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\libcpu\cortex-m4
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -494,7 +494,7 @@ build CMakeFiles/at32_app.elf.dir/rt-thread/bsp/board.c.obj: C_COMPILER__at32_ap
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rt-thread\bsp\board.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rt-thread\bsp
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -504,7 +504,7 @@ build CMakeFiles/at32_app.elf.dir/rttview/RTT/SEGGER_RTT.c.obj: C_COMPILER__at32
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rttview\RTT\SEGGER_RTT.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rttview\RTT
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -514,7 +514,7 @@ build CMakeFiles/at32_app.elf.dir/rttview/RTT/SEGGER_RTT_printf.c.obj: C_COMPILE
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\rttview\RTT\SEGGER_RTT_printf.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\rttview\RTT
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -524,7 +524,7 @@ build CMakeFiles/at32_app.elf.dir/user/src/main.c.obj: C_COMPILER__at32_app.2eel
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\user\src\main.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -534,7 +534,7 @@ build CMakeFiles/at32_app.elf.dir/user/src/at32f435_437_clock.c.obj: C_COMPILER_
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\user\src\at32f435_437_clock.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\src
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
@@ -544,9 +544,69 @@ build CMakeFiles/at32_app.elf.dir/user/src/tmr1_pwm.c.obj: C_COMPILER__at32_app.
   DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
   DEP_FILE = CMakeFiles\at32_app.elf.dir\user\src\tmr1_pwm.c.obj.d
   FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
-  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
   OBJECT_DIR = CMakeFiles\at32_app.elf.dir
   OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\src
+  TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
+
+build CMakeFiles/at32_app.elf.dir/user/src/curr_adc.c.obj: C_COMPILER__at32_app.2eelf_unscanned_Debug D$:/100W/MY_PRO/MIMI-FOC/user/src/curr_adc.c || cmake_object_order_depends_target_at32_app.elf
+  CONFIG = Debug
+  DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
+  DEP_FILE = CMakeFiles\at32_app.elf.dir\user\src\curr_adc.c.obj.d
+  FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  OBJECT_DIR = CMakeFiles\at32_app.elf.dir
+  OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\src
+  TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
+
+build CMakeFiles/at32_app.elf.dir/user/src/app_key.c.obj: C_COMPILER__at32_app.2eelf_unscanned_Debug D$:/100W/MY_PRO/MIMI-FOC/user/src/app_key.c || cmake_object_order_depends_target_at32_app.elf
+  CONFIG = Debug
+  DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
+  DEP_FILE = CMakeFiles\at32_app.elf.dir\user\src\app_key.c.obj.d
+  FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  OBJECT_DIR = CMakeFiles\at32_app.elf.dir
+  OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\src
+  TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
+
+build CMakeFiles/at32_app.elf.dir/user/src/app_key_rtos.c.obj: C_COMPILER__at32_app.2eelf_unscanned_Debug D$:/100W/MY_PRO/MIMI-FOC/user/src/app_key_rtos.c || cmake_object_order_depends_target_at32_app.elf
+  CONFIG = Debug
+  DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
+  DEP_FILE = CMakeFiles\at32_app.elf.dir\user\src\app_key_rtos.c.obj.d
+  FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  OBJECT_DIR = CMakeFiles\at32_app.elf.dir
+  OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\src
+  TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
+
+build CMakeFiles/at32_app.elf.dir/user/key/flexible_button.c.obj: C_COMPILER__at32_app.2eelf_unscanned_Debug D$:/100W/MY_PRO/MIMI-FOC/user/key/flexible_button.c || cmake_object_order_depends_target_at32_app.elf
+  CONFIG = Debug
+  DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
+  DEP_FILE = CMakeFiles\at32_app.elf.dir\user\key\flexible_button.c.obj.d
+  FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  OBJECT_DIR = CMakeFiles\at32_app.elf.dir
+  OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\key
+  TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
+
+build CMakeFiles/at32_app.elf.dir/user/foc/VF.c.obj: C_COMPILER__at32_app.2eelf_unscanned_Debug D$:/100W/MY_PRO/MIMI-FOC/user/foc/VF.c || cmake_object_order_depends_target_at32_app.elf
+  CONFIG = Debug
+  DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
+  DEP_FILE = CMakeFiles\at32_app.elf.dir\user\foc\VF.c.obj.d
+  FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  OBJECT_DIR = CMakeFiles\at32_app.elf.dir
+  OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\foc
+  TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
+
+build CMakeFiles/at32_app.elf.dir/user/foc/VF_data.c.obj: C_COMPILER__at32_app.2eelf_unscanned_Debug D$:/100W/MY_PRO/MIMI-FOC/user/foc/VF_data.c || cmake_object_order_depends_target_at32_app.elf
+  CONFIG = Debug
+  DEFINES = -DAT32F435RGT7 -DUSE_STDPERIPH_DRIVER
+  DEP_FILE = CMakeFiles\at32_app.elf.dir\user\foc\VF_data.c.obj.d
+  FLAGS = -g -std=gnu99 -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -ffunction-sections -fdata-sections -Wall
+  INCLUDES = -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/core_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support -ID:/100W/MY_PRO/MIMI-FOC/libraries/drivers/inc -ID:/100W/MY_PRO/MIMI-FOC/user/inc -ID:/100W/MY_PRO/MIMI-FOC/user/foc -ID:/100W/MY_PRO/MIMI-FOC/user/key -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/include -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/bsp -ID:/100W/MY_PRO/MIMI-FOC/rt-thread/libcpu/cortex-m4 -ID:/100W/MY_PRO/MIMI-FOC/rttview
+  OBJECT_DIR = CMakeFiles\at32_app.elf.dir
+  OBJECT_FILE_DIR = CMakeFiles\at32_app.elf.dir\user\foc
   TARGET_SUPPORT_DIR = CMakeFiles\at32_app.elf.dir
 
 
@@ -557,7 +617,7 @@ build CMakeFiles/at32_app.elf.dir/user/src/tmr1_pwm.c.obj: C_COMPILER__at32_app.
 #############################################
 # Link the executable at32_app.elf
 
-build at32_app.elf: C_EXECUTABLE_LINKER__at32_app.2eelf_Debug CMakeFiles/at32_app.elf.dir/libraries/cmsis/cm4/device_support/system_at32f435_437.c.obj CMakeFiles/at32_app.elf.dir/libraries/cmsis/cm4/device_support/startup/gcc/startup_at32f435_437.s.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_acc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_adc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_can.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_crc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_crm.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dac.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_debug.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dma.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dvp.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_edma.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_emac.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_ertc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_exint.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_flash.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_gpio.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_i2c.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_misc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_pwc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_qspi.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_scfg.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_sdio.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_spi.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_tmr.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_usart.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_usb.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_wdt.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_wwdt.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_xmc.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/clock.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/components.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/cpu.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/idle.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/ipc.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/irq.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/kservice.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/mem.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/object.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/scheduler.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/thread.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/timer.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/libcpu/cortex-m4/context_gcc.S.obj CMakeFiles/at32_app.elf.dir/rt-thread/libcpu/cortex-m4/cpuport.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/bsp/board.c.obj CMakeFiles/at32_app.elf.dir/rttview/RTT/SEGGER_RTT.c.obj CMakeFiles/at32_app.elf.dir/rttview/RTT/SEGGER_RTT_printf.c.obj CMakeFiles/at32_app.elf.dir/user/src/main.c.obj CMakeFiles/at32_app.elf.dir/user/src/at32f435_437_clock.c.obj CMakeFiles/at32_app.elf.dir/user/src/tmr1_pwm.c.obj | D$:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support/startup/gcc/linker/AT32F435xG_FLASH.ld
+build at32_app.elf: C_EXECUTABLE_LINKER__at32_app.2eelf_Debug CMakeFiles/at32_app.elf.dir/libraries/cmsis/cm4/device_support/system_at32f435_437.c.obj CMakeFiles/at32_app.elf.dir/libraries/cmsis/cm4/device_support/startup/gcc/startup_at32f435_437.s.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_acc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_adc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_can.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_crc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_crm.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dac.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_debug.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dma.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_dvp.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_edma.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_emac.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_ertc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_exint.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_flash.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_gpio.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_i2c.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_misc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_pwc.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_qspi.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_scfg.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_sdio.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_spi.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_tmr.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_usart.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_usb.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_wdt.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_wwdt.c.obj CMakeFiles/at32_app.elf.dir/libraries/drivers/src/at32f435_437_xmc.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/clock.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/components.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/cpu.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/idle.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/ipc.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/irq.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/kservice.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/mem.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/object.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/scheduler.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/thread.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/src/timer.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/libcpu/cortex-m4/context_gcc.S.obj CMakeFiles/at32_app.elf.dir/rt-thread/libcpu/cortex-m4/cpuport.c.obj CMakeFiles/at32_app.elf.dir/rt-thread/bsp/board.c.obj CMakeFiles/at32_app.elf.dir/rttview/RTT/SEGGER_RTT.c.obj CMakeFiles/at32_app.elf.dir/rttview/RTT/SEGGER_RTT_printf.c.obj CMakeFiles/at32_app.elf.dir/user/src/main.c.obj CMakeFiles/at32_app.elf.dir/user/src/at32f435_437_clock.c.obj CMakeFiles/at32_app.elf.dir/user/src/tmr1_pwm.c.obj CMakeFiles/at32_app.elf.dir/user/src/curr_adc.c.obj CMakeFiles/at32_app.elf.dir/user/src/app_key.c.obj CMakeFiles/at32_app.elf.dir/user/src/app_key_rtos.c.obj CMakeFiles/at32_app.elf.dir/user/key/flexible_button.c.obj CMakeFiles/at32_app.elf.dir/user/foc/VF.c.obj CMakeFiles/at32_app.elf.dir/user/foc/VF_data.c.obj | D$:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support/startup/gcc/linker/AT32F435xG_FLASH.ld
   CONFIG = Debug
   FLAGS = -g
   LINK_FLAGS = -mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -T D:/100W/MY_PRO/MIMI-FOC/libraries/cmsis/cm4/device_support/startup/gcc/linker/AT32F435xG_FLASH.ld -Wl,--gc-sections -Wl,--print-memory-usage

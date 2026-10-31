@@ -25,7 +25,7 @@
 /*   APB2 分频>1 时 TMR1 时钟 = APB2 x 2 = 288MHz                          */
 /* ----------------------------------------------------------------------- */
 #define TMR1_CLK_HZ          288000000UL   /* TMR1 计数时钟 */
-#define TMR1_PWM_FREQ_HZ     10000UL       /* PWM 频率（中心对齐下 f=CLK/(2*(ARR+1))） */
+#define TMR1_PWM_FREQ_HZ     10000UL       /* PWM 频率（中心对齐下 f=CLK/(2*(ARR+1))） 10K */
 #define TMR1_PWM_ARR         ((TMR1_CLK_HZ / (2UL * TMR1_PWM_FREQ_HZ)) - 1UL) /* 默认 14399 */
 
 /* 死区：DTC 单位 = 1/TMR1CLK = 3.47ns；DTC=100 即约 347ns */
@@ -37,10 +37,12 @@
 #define TMR1_CH_V             2
 #define TMR1_CH_W             3
 
-void tmr1_pwm_init(void);                                /* 默认 20kHz + DTC=100 */
+void tmr1_pwm_init(void);                                /* 默认 10kHz + DTC=100(≈347ns) */
 void tmr1_pwm_init_ex(uint32_t freq_hz, uint16_t deadtime_dtc);
 void tmr1_pwm_set_ccr(uint8_t ch, uint16_t ccr);          /* 直接写比较值（FOC/SVPWM 直用） */
 void tmr1_pwm_set_duty(uint8_t ch, uint16_t permille);    /* 占空比 0~1000（千分比） */
 void tmr1_pwm_output_enable(confirm_state en);            /* OEN：输出总开关（急停/恢复） */
+void tmr1_pwm_set_update_cb(void (*cb)(void));            /* 注册 TMR1 上溢中断回调（每 PWM 周期调用一次，FOC 步进用） */
+void tmr1_pwm_set_midpoint_cb(void (*cb)(void));           /* 注册 CH4 比较中断回调（周期中点前 1 点触发，G4 式，每 PWM 周期一次） */
 
 #endif /* __TMR1_PWM_H */

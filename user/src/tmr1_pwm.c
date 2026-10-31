@@ -25,6 +25,9 @@
 
 static uint16_t s_pwm_arr = TMR1_PWM_ARR;   /* 当前 ARR，供占空比换算 */
 
+static void (*s_update_cb)(void) = (void *)0;   /* TMR1 上溢中断回调（FOC 步进），默认无 */
+static void (*s_midpoint_cb)(void) = (void *)0;  /* CH4 比较中断回调（周期中点前1点触发），默认无 */
+
 /**
   * @brief  TMR1 三相中心对称互补 PWM 初始化
   * @param  freq_hz     PWM 频率（中心对齐：f = TMR1CLK/(2*(ARR+1))）
@@ -114,6 +117,31 @@ void tmr1_pwm_init_ex(uint32_t freq_hz, uint16_t deadtime_dtc)
   /* ---------- 7. 总闸：主输出使能（MOE/OEN）+ 启动计数 ---------- */
   tmr_output_enable(TMR1, TRUE);
   tmr_counter_enable(TMR1, TRUE);
+
+  /* ---------- 8. TMR1 上溢中断（FOC 同步点） ----------
+   * 中心对齐模式1 = 下溢更新：每 PWM 周期触发一次（默认 10kHz）。
+   * 中断优先级 2（RT-Thread 4 位抢占分组下足够高，快于主循环线程）。
+   * 回调由 tmr1_pwm_set_update_cb() 注册，默认空转无开销。
+   */
+  tmr_interrupt_enable(TMR1, TMR_OVF_INT, TRUE);
+  nvic_irq_enable(TMR1_OVF_TMR10_IRQn, 2, 0);
+
+  /* ---------- 9. CH4 中点触发源（G4 式同步点，暂不用 ADC） ----------
+   * 参照 G4 工程：CH4 用 PWM2 语义 + CCR=ARR-1（顶点前 1 点）产生触发事件。
+   * G4 是把 CH4 事件引到 ADC 注入；这里直接取"比较中断"本身：
+   *   CH4 = PWM_B（CNT>CCR 有效，等价 G4 PWM2）+ CCR4 = ARR-1
+   *   → 上坡计数匹配时刻 = 周期中点（顶点）前 1 个计数点
+   *   回调由 tmr1_pwm_set_midpoint_cb() 注册，每 PWM 周期一次
+   * 注：CH4 不映射 GPIO（oc_output_state=FALSE），纯内部事件，不影响三相互补。
+   */
+  tmr_output_struct.oc_mode = TMR_OUTPUT_CONTROL_PWM_MODE_B;
+  tmr_output_struct.oc_output_state = FALSE;          /* CH4 不输出，仅产生比较事件 */
+  tmr_output_struct.occ_output_state = FALSE;
+  tmr_output_struct.oc_polarity = TMR_OUTPUT_ACTIVE_HIGH;
+  tmr_output_channel_config(TMR1, TMR_SELECT_CHANNEL_4, &tmr_output_struct);
+  tmr_channel_value_set(TMR1, TMR_SELECT_CHANNEL_4, (uint16_t)(s_pwm_arr - 1U));  /* 顶点前 1 点 */
+  tmr_interrupt_enable(TMR1, TMR_C4_INT, TRUE);
+  nvic_irq_enable(TMR1_CH_IRQn, 2, 0);
 }
 
 /**
@@ -173,4 +201,58 @@ void tmr1_pwm_set_duty(uint8_t ch, uint16_t permille)
 void tmr1_pwm_output_enable(confirm_state en)
 {
   tmr_output_enable(TMR1, en);
+}
+
+/**
+  * @brief  注册 TMR1 上溢中断回调（每 PWM 周期调用一次）
+  * @param  cb 回调函数指针（中断上下文，禁止阻塞/打印；传 NULL 取消）
+  * @retval none
+  */
+void tmr1_pwm_set_update_cb(void (*cb)(void))
+{
+  s_update_cb = cb;
+}
+
+/**
+  * @brief  TMR1 上溢中断服务函数
+  * @note   TMR1 上溢与 TMR10 共用向量（TMR10 未启用，无冲突）。
+  *         中心对齐模式1下每 PWM 周期下溢触发一次 = FOC 步进同步点。
+  *         先清标志再执行回调，防止回调期间重复进入。
+  */
+void TMR1_OVF_TMR10_IRQHandler(void)
+{
+  tmr_flag_clear(TMR1, TMR_OVF_FLAG);
+  if(s_update_cb != (void *)0)
+  {
+    s_update_cb();
+  }
+}
+
+/**
+  * @brief  注册 CH4 中点触发回调（每 PWM 周期一次，G4 式同步点）
+  * @param  cb 回调函数指针（中断上下文，禁止阻塞/打印；传 NULL 取消）
+  * @note   触发时刻 = 周期中点（顶点 CNT=ARR）前 1 个计数点（CNT=ARR-1），
+  *         与 G4 工程 CH4(PWM2, CCR=ARR-1) 的 ADC 触发相位一致；
+  *         本实现直接走比较中断，未接 ADC。
+  * @retval none
+  */
+void tmr1_pwm_set_midpoint_cb(void (*cb)(void))
+{
+  s_midpoint_cb = cb;
+}
+
+/**
+  * @brief  TMR1 通道中断服务函数（CH4 比较 → 周期中点前 1 点触发）
+  * @note   TMR1 CH1~4 比较中断共用此向量（CH1/2/3 未使能中断，无冲突）。
+  *         中心对齐下上坡匹配(CNT=ARR-1)与下坡匹配仅隔 2 个计数（约 7ns），
+  *         NVIC 响应远慢于该间隔 → 两次匹配合并为一次标志置位，
+  *         先清标志再执行回调，自然每 PWM 周期只回调一次（相位=上坡匹配点）。
+  */
+void TMR1_CH_IRQHandler(void)
+{
+  tmr_flag_clear(TMR1, TMR_C4_FLAG);
+  if(s_midpoint_cb != (void *)0)
+  {
+    s_midpoint_cb();
+  }
 }

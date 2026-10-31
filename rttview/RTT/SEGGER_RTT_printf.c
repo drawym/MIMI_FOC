@@ -68,6 +68,7 @@ Revision: $Rev: 17697 $
 
 #include <stdlib.h>
 #include <stdarg.h>
+#include <math.h>
 
 
 #define FORMAT_FLAG_LEFT_JUSTIFY   (1u << 0)
@@ -298,6 +299,150 @@ static void _PrintInt(SEGGER_RTT_PRINTF_DESC * pBufferDesc, int v, unsigned Base
 
 /*********************************************************************
 *
+*       _PrintFloat
+*
+*  Description:
+*    为 RTT printf 增加 %f 浮点支持（官方精简版只支持整数格式）。
+*    支持：负号、'+' 标志、字段宽度、左右对齐、'0' 填充、精度（%.Nf）。
+*    约定：未写精度的 %f 按 0 位小数处理（等价 %.0f），需要小数请显式
+*          写 %.1f / %.2f ...（精度上限 7 位）；NaN/Inf 打印为 nan/inf。
+*    注意：float 经可变参数会提升为 double，故按 double 取值。
+*/
+static void _PrintFloat(SEGGER_RTT_PRINTF_DESC * pBufferDesc, double v, unsigned NumDigits, unsigned FieldWidth, unsigned FormatFlags) {
+  char acNum[32];
+  char acTmp[20];
+  const char * pSpecial;
+  double absv;
+  unsigned long power;
+  unsigned long integer_part;
+  unsigned long frac_part;
+  unsigned n;
+  unsigned t;
+  unsigned i;
+  unsigned Width;
+  int Negative;
+  int HasSign;
+  char Pad;
+  char SignChar;
+
+  n = 0u;
+  t = 0u;
+  power = 1u;
+  frac_part = 0u;
+  pSpecial = 0;
+  Negative = 0;
+
+  if (isnan(v)) {
+    pSpecial = "nan";
+  } else if (isinf(v)) {
+    pSpecial = "inf";
+    Negative = (v < 0.0);
+  } else {
+    Negative = (v < 0.0);
+    absv = Negative ? -v : v;
+    if (NumDigits > 7u) {
+      NumDigits = 7u;                       // 防止 10^N 超出 unsigned long
+    }
+    for (i = 0u; i < NumDigits; i++) {
+      power *= 10u;
+    }
+    if (NumDigits == 0u) {
+      integer_part = (unsigned long)(absv + 0.5);        // 无小数：整体四舍五入
+    } else {
+      unsigned long scaled_int;
+      double scaled = absv * (double)power + 0.5;        // 四舍五入到指定精度
+      scaled_int = (unsigned long)scaled;
+      integer_part = scaled_int / power;
+      frac_part = scaled_int - integer_part * power;
+    }
+    //
+    // 整数部分：先逆序写入临时缓冲，再正序输出
+    //
+    if (integer_part == 0u) {
+      acTmp[t++] = '0';
+    } else {
+      unsigned long x = integer_part;
+      while (x != 0u) {
+        acTmp[t++] = (char)('0' + (x % 10u));
+        x /= 10u;
+      }
+    }
+    while (t > 0u) {
+      acNum[n++] = acTmp[--t];
+    }
+    //
+    // 小数部分：高位补 0，凑足 NumDigits 位
+    //
+    if (NumDigits > 0u) {
+      unsigned long p = power;
+      acNum[n++] = '.';
+      for (i = 0u; i < NumDigits; i++) {
+        p /= 10u;
+        acNum[n++] = (char)('0' + ((frac_part / p) % 10u));
+      }
+    }
+  }
+  if (pSpecial != 0) {
+    while (pSpecial[n] != '\0') {
+      acNum[n] = pSpecial[n];
+      n++;
+    }
+  }
+  acNum[n] = '\0';
+
+  //
+  // 符号与总宽度
+  //
+  HasSign = Negative || ((FormatFlags & FORMAT_FLAG_PRINT_SIGN) != 0u);
+  SignChar = Negative ? '-' : '+';
+  Width = n + (HasSign ? 1u : 0u);
+
+  //
+  // 前导填充（非左对齐）
+  //
+  if ((FormatFlags & FORMAT_FLAG_LEFT_JUSTIFY) == 0u) {
+    Pad = ((FormatFlags & FORMAT_FLAG_PAD_ZERO) != 0u) ? '0' : ' ';
+    if ((Pad == '0') && (HasSign != 0)) {
+      _StoreChar(pBufferDesc, SignChar);    // 0 填充时符号在最前
+    }
+    while (FieldWidth > Width) {
+      FieldWidth--;
+      _StoreChar(pBufferDesc, Pad);
+      if (pBufferDesc->ReturnValue < 0) {
+        return;
+      }
+    }
+    if ((Pad == ' ') && (HasSign != 0)) {
+      _StoreChar(pBufferDesc, SignChar);
+    }
+  } else if (HasSign != 0) {
+    _StoreChar(pBufferDesc, SignChar);
+  }
+  //
+  // 数字本体
+  //
+  for (i = 0u; i < n; i++) {
+    _StoreChar(pBufferDesc, acNum[i]);
+    if (pBufferDesc->ReturnValue < 0) {
+      return;
+    }
+  }
+  //
+  // 尾随空格（左对齐）
+  //
+  if ((FormatFlags & FORMAT_FLAG_LEFT_JUSTIFY) != 0u) {
+    while (FieldWidth > Width) {
+      FieldWidth--;
+      _StoreChar(pBufferDesc, ' ');
+      if (pBufferDesc->ReturnValue < 0) {
+        return;
+      }
+    }
+  }
+}
+
+/*********************************************************************
+*
 *       Public code
 *
 **********************************************************************
@@ -440,6 +585,13 @@ int SEGGER_RTT_vprintf(unsigned BufferIndex, const char * sFormat, va_list * pPa
       case 'p':
         v = va_arg(*pParamList, int);
         _PrintUnsigned(&BufferDesc, (unsigned)v, 16u, 8u, 8u, 0u);
+        break;
+      case 'f':
+      case 'F':
+        {
+          double fv = va_arg(*pParamList, double);
+          _PrintFloat(&BufferDesc, fv, NumDigits, FieldWidth, FormatFlags);
+        }
         break;
       case '%':
         _StoreChar(&BufferDesc, '%');

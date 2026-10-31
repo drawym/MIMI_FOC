@@ -94,7 +94,7 @@ typedef enum
 
 /**
   * @brief gpio output type
-  */
+*/
 typedef enum
 {
   GPIO_OUTPUT_PUSH_PULL                  = 0x00, /*!< output push-pull */

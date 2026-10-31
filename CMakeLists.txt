@@ -26,6 +26,8 @@ include_directories(
     ${CMAKE_CURRENT_SOURCE_DIR}/libraries/cmsis/cm4/device_support
     ${CMAKE_CURRENT_SOURCE_DIR}/libraries/drivers/inc
     ${CMAKE_CURRENT_SOURCE_DIR}/user/inc
+    ${CMAKE_CURRENT_SOURCE_DIR}/user/foc
+    ${CMAKE_CURRENT_SOURCE_DIR}/user/key
     ${CMAKE_CURRENT_SOURCE_DIR}/rt-thread/include
     ${CMAKE_CURRENT_SOURCE_DIR}/rt-thread/bsp
     ${CMAKE_CURRENT_SOURCE_DIR}/rt-thread/libcpu/cortex-m4
@@ -63,6 +65,12 @@ set(SOURCES
     user/src/main.c
     user/src/at32f435_437_clock.c
     user/src/tmr1_pwm.c
+    user/src/curr_adc.c
+    user/src/app_key.c
+    user/src/app_key_rtos.c
+    user/key/flexible_button.c
+    user/foc/VF.c
+    user/foc/VF_data.c
 )
 
 # 6️⃣ 编译选项：Cortex-M4 + 硬件 FPU

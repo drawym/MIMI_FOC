@@ -1,0 +1,162 @@
+{
+	"globsDependent" : 
+	[
+		{
+			"expression" : "D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/*.c",
+			"listDirectories" : true,
+			"paths" : 
+			[
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_acc.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_adc.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_can.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_crc.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_crm.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_dac.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_debug.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_dma.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_dvp.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_edma.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_emac.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_ertc.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_exint.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_flash.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_gpio.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_i2c.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_misc.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_pwc.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_qspi.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_scfg.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_sdio.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_spi.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_tmr.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_usart.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_usb.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_wdt.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_wwdt.c",
+				"D:/100W/MY_PRO/MIMI-FOC/libraries/drivers/src/at32f435_437_xmc.c"
+			]
+		}
+	],
+	"inputs" : 
+	[
+		{
+			"path" : "CMakeLists.txt"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.3.2/CMakeSystem.cmake"
+		},
+		{
+			"path" : "cmake/arm_gcc.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeSystemSpecificInitialize.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.3.2/CMakeCCompiler.cmake"
+		},
+		{
+			"isGenerated" : true,
+			"path" : "build/CMakeFiles/4.3.2/CMakeASMCompiler.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeSystemSpecificInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeGenericSystem.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeInitializeConfigs.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Platform/Generic.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeCInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeLanguageInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Compiler/GNU-C.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Compiler/CMakeCommonCompilerMacros.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Platform/Generic.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeCommonLanguageInclude.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Internal/CMakeCLinkerInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Internal/CMakeCommonLinkerInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/CMakeASMInformation.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Compiler/GNU-ASM.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Compiler/GNU.cmake"
+		},
+		{
+			"isCMake" : true,
+			"isExternal" : true,
+			"path" : "D:/cmake/share/cmake-4.3/Modules/Internal/CMakeASMLinkerInformation.cmake"
+		}
+	],
+	"kind" : "cmakeFiles",
+	"paths" : 
+	{
+		"build" : "D:/100W/MY_PRO/MIMI-FOC/build",
+		"source" : "D:/100W/MY_PRO/MIMI-FOC"
+	},
+	"version" : 
+	{
+		"major" : 1,
+		"minor" : 1
+	}
+}
