@@ -3,6 +3,7 @@
 #include "tmr1_pwm.h"
 #include "app_key_rtos.h"   /* 按键：app_key_begin / watcher_init / on / pump */
 #include "curr_adc.h"       /* 三相电流中点采样：PC0/1/2 → ADC1_IN10/11/12 */
+#include "usart_log.h"      /* 调试串口：UART4（PH2=RX / PH3=TX） */
 #include "VF.h"
 #include "at32f435_437.h"
 
@@ -126,6 +127,10 @@ static void thread_b_entry(void *parameter)
 
 int main(void)
 {
+    // /* ---- 0. 调试串口：UART4（PH2=RX / PH3=TX），115200-8-N-1 ---- */
+    // usart_log_init(USART_LOG_DEFAULT_BAUD);
+    // USART_LOG("boot ok, sclk=%u Hz\r\n", system_core_clock);
+
     /* ---- 1. PWM 初始化（10kHz；三相 CCR 初始 50%，零矢量，安全） ---- */
     tmr1_pwm_init();
 
@@ -163,11 +168,13 @@ int main(void)
     /* ---- 6. main 主循环：周期打印三相 CCR（电流已在中点中断里 100Hz 打印） ---- */
     while (1)
     {
-        if (s_motor_run != 0U)
+        // if (s_motor_run != 0U)
         {
             SEGGER_RTT_printf(0, "tABC=%.1f,%.1f,%.1f\n",
                               rtY.tABC[0], rtY.tABC[1], rtY.tABC[2]);
         }
         rt_thread_mdelay(500);
+
+        USART_LOG("boot ok, sclk=%u Hz\r\n", system_core_clock);
     }
 }

@@ -58,7 +58,8 @@
 
 /* ---- ③ 最多支持多少个订阅者（同时有多少个线程/模块在监听按键） ----------- */
 #define APP_KEY_MAX_SUBS        4
-#define APP_KEY_QUEUE_SIZE      64
+/* 队列深度 APP_KEY_QUEUE_SIZE 由 app_key.h 统一给出（它与 app_key_sub_t.q[]
+ * 的数组长度是同一个宏，此处绝不能再定义一次，否则就是越界写） */
 
 
 /* ---- ④ 引脚映射表：每个按键编号对应哪个 GPIO（换板子改这里） ------------ */
@@ -229,10 +230,25 @@ app_key_sub_t *app_key_subscribe(app_key_sub_t *sub,
                                  app_key_notify_fn notify, void *user)
 {
     int i;
+    int free_slot = -1;
 
     if (sub == 0)
     {
         return 0;
+    }
+
+    /* 先查重，再申请空位。
+     * 若先找空位后查重，当 sub 已在表中而前面存在空位时，会被重复插入两次：
+     * 同一个事件投递两份、信号量计数多于队列长度，表现为"偶发丢键"。
+     * 重复订阅只更新钩子，不重置队列（避免丢弃未读事件）。 */
+    for (i = 0; i < APP_KEY_MAX_SUBS; i++)
+    {
+        if (s_subs[i] == sub)
+        {
+            sub->notify      = notify;
+            sub->notify_user = user;
+            return sub;
+        }
     }
 
     /* 初始化该订阅者的队列 */
@@ -245,16 +261,18 @@ app_key_sub_t *app_key_subscribe(app_key_sub_t *sub,
     {
         if (s_subs[i] == 0)
         {
-            s_subs[i] = sub;
-            return sub;
-        }
-        if (s_subs[i] == sub)
-        {
-            return sub;   /* 重复订阅：只更新钩子 */
+            free_slot = i;
+            break;
         }
     }
 
-    return 0;   /* 订阅者已满 */
+    if (free_slot < 0)
+    {
+        return 0;   /* 订阅者已满 */
+    }
+
+    s_subs[free_slot] = sub;
+    return sub;
 }
 
 /**
@@ -309,17 +327,12 @@ uint8_t app_key_get(app_key_sub_t *sub, app_key_id_t *id,
   */
 uint8_t app_key_pending(app_key_sub_t *sub)
 {
-    int16_t n;
-
     if (sub == 0)
     {
         return 0;
     }
 
-    n = (int16_t)sub->head - (int16_t)sub->tail;
-    if (n < 0)
-    {
-        n += APP_KEY_QUEUE_SIZE;
-    }
-    return (uint8_t)n;
+    /* 用无符号差 + 掩码求环形长度：对任意 head/tail 组合都正确，
+     * 不依赖 int16_t 的符号判断，也不会因队列长度变大而溢出 */
+    return (uint8_t)((uint16_t)(sub->head - sub->tail) & APP_KEY_QUEUE_MASK);
 }

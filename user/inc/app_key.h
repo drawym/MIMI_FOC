@@ -33,11 +33,20 @@ typedef struct
 } app_key_msg_t;
 
 /* 每个订阅者的事件队列深度（必须是 2 的幂，便于用掩码回绕）。
+ *
+ * ⚠ 本宏同时决定 app_key_sub_t.q[] 的数组长度，【只能在这里定义一次】。
+ *   任何 .c 文件都不得再 #define 覆盖它：否则结构体按旧值分配数组、
+ *   掩码却按新值回绕，环形缓冲会越界写到 head/tail/notify 上（历史 bug）。
  * 可在 include 本头文件之前用 -DAPP_KEY_QUEUE_SIZE=xx 覆盖。 */
 #ifndef APP_KEY_QUEUE_SIZE
-#define APP_KEY_QUEUE_SIZE   8u
+#define APP_KEY_QUEUE_SIZE   64u
 #endif
 #define APP_KEY_QUEUE_MASK   (APP_KEY_QUEUE_SIZE - 1u)
+
+/* 编译期校验：必须是 2 的幂，否则掩码回绕不成立 */
+#if (APP_KEY_QUEUE_SIZE == 0u) || ((APP_KEY_QUEUE_SIZE & (APP_KEY_QUEUE_SIZE - 1u)) != 0u)
+#error "APP_KEY_QUEUE_SIZE must be a power of two (e.g. 16 / 32 / 64)"
+#endif
 
 /* 事件到达通知钩子（平台无关）：
  * 纯 C 核心在"成功投递一个事件到某订阅者队列"后调用它。

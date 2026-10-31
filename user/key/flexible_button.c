@@ -94,7 +94,7 @@ int32_t flex_button_register(flex_button_t *button)
 {
     flex_button_t *curr = btn_head;
     
-    if (!button || (button_cnt > sizeof(btn_type_t) * 8))
+    if (!button || (button_cnt >= sizeof(btn_type_t) * 8))
     {
         return -1;
     }
@@ -258,7 +258,13 @@ static uint8_t flex_button_process(void)
                 {
                     /* swtich to multiple click stage */
                     target->status = FLEX_BTN_STAGE_MULTIPLE_CLICK;
-                    target->click_cnt ++;
+                    target->click_cnt++;
+
+                    /* 修复：多击判定窗口必须从"抬手时刻"重新计时。
+                     * 原版不清零，scan_cnt 会保留本次按下的时长；当按住时间
+                     * 超过 max_multiple_clicks_interval（默认 300ms）时，
+                     * 抬手后下一个扫描周期就立刻上报单击，双击永远无法成立。 */
+                    target->scan_cnt = 0;
                 }
             }
             break;

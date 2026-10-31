@@ -66,6 +66,7 @@ set(SOURCES
     user/src/at32f435_437_clock.c
     user/src/tmr1_pwm.c
     user/src/curr_adc.c
+    user/src/usart_log.c
     user/src/app_key.c
     user/src/app_key_rtos.c
     user/key/flexible_button.c
