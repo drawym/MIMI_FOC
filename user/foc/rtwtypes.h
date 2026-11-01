@@ -1,11 +1,11 @@
 /*
  * File: rtwtypes.h
  *
- * Code generated for Simulink model 'VF'.
+ * Code generated for Simulink model 'currloop0'.
  *
- * Model version                  : 1.2
+ * Model version                  : 9.4
  * Simulink Coder version         : 25.2 (R2025b) 28-Jul-2025
- * C/C++ source code generated on : Sat Oct 24 21:14:34 2026
+ * C/C++ source code generated on : Sun Nov  1 22:50:05 2026
  *
  * Target selection: ert.tlc
  * Embedded hardware selection: ARM Compatible->ARM Cortex-M

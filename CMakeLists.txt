@@ -67,11 +67,18 @@ set(SOURCES
     user/src/tmr1_pwm.c
     user/src/curr_adc.c
     user/src/usart_log.c
+    user/src/foc_scope.c
     user/src/app_key.c
     user/src/app_key_rtos.c
     user/key/flexible_button.c
-    user/foc/VF.c
-    user/foc/VF_data.c
+    # --- Simulink 生成代码：电流闭环（currloop0）---
+    # 注意：VF.c 与 currloop0.c 都定义了 rtU/rtY/rtDW/rtConstP 等全局符号，
+    #       两者【不能同时编译】，否则链接期必然 multiple definition。
+    #       想切回开环 VF，就把下面两行注释掉、改成 user/foc/VF/VF.c + VF_data.c
+    user/foc/currloop0.c
+    user/foc/currloop0_data.c
+    # user/foc/VF/VF.c
+    # user/foc/VF/VF_data.c
 )
 
 # 6️⃣ 编译选项：Cortex-M4 + 硬件 FPU

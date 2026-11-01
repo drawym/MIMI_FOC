@@ -36,13 +36,39 @@
  *       → 输出 = REF_1.65V + I × R × G = 1.65V + I × 0.1V
  * 因此：灵敏度 1A → 100mV；零点偏置 = 1.65V（硬件基准 U7 提供）
  * 电流范围：0~3.3V 对应 -16.5A ~ +16.5A
+ *
+ * 器件确认（原理图 U11/U13/U15）：INA181A1IDBVT，A1 档增益 20V/V；
+ * REF 脚接 U7(TLV9001) 缓冲的 R1/R2=20k/20k 分压 = A3.3V/2。
+ * ⚠ A3.3V 同时就是 ADC 的 VREF+（U17.13），所以零点天生落在 VREF/2，
+ *   与 3.3V 实际是 3.28 还是 3.30 无关（比例式，抗电源漂移）。
  */
 #define CURR_ADC_RSENSE_MOHM 5UL     /* 采样电阻 5mΩ */
 #define CURR_ADC_GAIN        20UL    /* 运放放大倍数 */
 #define CURR_ADC_BIAS_MV     1650UL  /* 运放零点偏置（REF_1.65V） */
 
+/* 标称零点码值：1.65V 折算成 12 位码值 = 1650×4095/3300 = 2048（四舍五入）。
+ * 仅作为"未标定时"的默认值，实际使用 curr_adc_calibrate() 测得的 s_offset_code。 */
+#define CURR_ADC_BIAS_CODE   ((int16_t)(((int32_t)CURR_ADC_BIAS_MV * (int32_t)CURR_ADC_RES_MAX \
+                                         + (int32_t)CURR_ADC_VREF_MV / 2) / (int32_t)CURR_ADC_VREF_MV))
+
+/* 每码值对应的电流（mA）：VREF_mV × 1000 / (满码 × R × G) 的分子部分。
+ * 这里预先算成整数比例：mA = delta_code × CURR_ADC_MA_SCALE / CURR_ADC_RES_MAX
+ * 当前参数下 = 3300×1000/(5×20) = 33000 → 1 码 ≈ 8.06mA
+ * （换 A2 档增益 50 时自动变成 13200 → 1 码 ≈ 3.22mA，无需改公式） */
+#define CURR_ADC_MA_SCALE   ((int32_t)CURR_ADC_VREF_MV * 1000L / \
+                             ((int32_t)CURR_ADC_RSENSE_MOHM * (int32_t)CURR_ADC_GAIN))
+
+/* ---- 零点标定参数 --------------------------------------------------------- */
+#define CURR_ADC_CAL_SAMPLES  256U   /* 标定采样次数：256×100us = 25.6ms，覆盖 256 个 PWM 周期 */
+#define CURR_ADC_CAL_TOL_CODE 150U   /* 零点允许偏离标称值的码数；超出判为异常（≈1.2A） */
+
 /* 三相采样结果（最近一次中点采样的原始码值） */
 static uint16_t s_curr_raw[3] = {0U, 0U, 0U};
+
+/* 三相零点码值：上电标定后写入；初值为标称 2048，未标定时也能正常工作 */
+static uint16_t s_offset_code[3] = {(uint16_t)CURR_ADC_BIAS_CODE,
+                                    (uint16_t)CURR_ADC_BIAS_CODE,
+                                    (uint16_t)CURR_ADC_BIAS_CODE};
 
 /**
   * @brief  初始化 ADC1 普通组：3 通道序列、软件触发、12 位、校准
@@ -135,6 +161,74 @@ void curr_adc_sample(void)
 }
 
 /**
+  * @brief  零点标定：记录电机静止、零电流时每相对应的 ADC 码值
+  * @note   前置条件（缺一不可）：电机静止、三相 CCR=50% 零矢量。
+  *         此时采样电阻上无相电流，读到的码值就是"零点"，
+  *         它包含 1.65V 标称偏置 + INA181 输入失调 + 分压电阻误差 + ADC 失调。
+  *         标定后 curr_adc_get_amp() 直接减这个实测零点，
+  *         可把 ±20~50mA 的直流偏差压到 ±1 码（约 8mA）。
+  * @retval 1=标定成功；0=某相偏差过大（多半是标定时电机在转），已回退标称零点
+  */
+uint8_t curr_adc_calibrate(void)
+{
+  uint32_t sum_code[3]  = {0U, 0U, 0U};   /* 三相码值累加和（先累加后除法，避免逐次截断） */
+  uint16_t avg_code[3];                   /* 三相平均码值（即标定得到的零点） */
+  uint16_t sample_index;                  /* 采样序号 */
+  uint8_t  phase;                         /* 相序号：0=U 1=V 2=W */
+  int32_t  deviation_code;                /* 实测零点与标称零点的偏差（码） */
+
+  for (sample_index = 0U; sample_index < CURR_ADC_CAL_SAMPLES; sample_index++)
+  {
+    curr_adc_sample();                    /* 三相各采一次，约 5us */
+
+    for (phase = 0U; phase < 3U; phase++)
+    {
+      sum_code[phase] += s_curr_raw[phase];
+    }
+  }
+
+  /* 加半个分母再除，等于四舍五入，避免一律向下取整 */
+  for (phase = 0U; phase < 3U; phase++)
+  {
+    avg_code[phase] = (uint16_t)((sum_code[phase] + CURR_ADC_CAL_SAMPLES / 2U)
+                                 / CURR_ADC_CAL_SAMPLES);
+  }
+
+  /* 先校验再落盘：任一路异常则整体不采纳，避免写入无效零点造成读数偏移 */
+  for (phase = 0U; phase < 3U; phase++)
+  {
+    deviation_code = (int32_t)avg_code[phase] - (int32_t)CURR_ADC_BIAS_CODE;
+
+    if ((deviation_code > (int32_t)CURR_ADC_CAL_TOL_CODE) ||
+        (deviation_code < -(int32_t)CURR_ADC_CAL_TOL_CODE))
+    {
+      s_offset_code[0] = (uint16_t)CURR_ADC_BIAS_CODE;
+      s_offset_code[1] = (uint16_t)CURR_ADC_BIAS_CODE;
+      s_offset_code[2] = (uint16_t)CURR_ADC_BIAS_CODE;
+      return 0U;
+    }
+  }
+
+  s_offset_code[0] = avg_code[0];
+  s_offset_code[1] = avg_code[1];
+  s_offset_code[2] = avg_code[2];
+
+  return 1U;
+}
+
+/**
+  * @brief  取某相当前使用的零点码值（调试/打印用）
+  */
+uint16_t curr_adc_get_offset_code(uint8_t phase)
+{
+  if (phase > CURR_PHASE_W)
+  {
+    return 0U;
+  }
+  return s_offset_code[phase];
+}
+
+/**
   * @brief  取某相原始码值
   */
 uint16_t curr_adc_get_raw(uint8_t phase)
@@ -157,20 +251,25 @@ uint16_t curr_adc_get_mv(uint8_t phase)
 
 /**
   * @brief  取某相电流（毫安，带符号：正=流出母线，负=回流）
-  * @note   换算：I(mA) = (V_adc_mV - 1.65V偏置) × 1000 / (5mΩ × 20)
-  *                = (V_adc_mV - 1650) × 10
-  *         停止且无电流时三相应接近 0mA（±几十 mA 噪声属正常）。
+  * @note   直接用码值计算，不做"码值→mV→电流"的两次整数除法，
+  *         避免中间一步向下取整带来的系统性偏小（约 -4mA）：
+  *           I(mA) = (raw - offset) × VREF_mV × 1000 / (4095 × R × G)
+  *         其中 offset 是 curr_adc_calibrate() 实测的零点码值，
+  *         【已经包含 1.65V 偏置】，所以这里不再单独减 1650mV。
+  *         灵敏度：1 码 ≈ 8.06mA（R=5mΩ，G=20）。
+  *         停止且无电流时三相应接近 0mA（标定后应只剩 ±8~16mA 噪声）。
   */
 int16_t curr_adc_get_amp(uint8_t phase)
 {
-  int32_t diff_mv;
+  int32_t delta_code;   /* 相对零点的码值差：正=高于零点(正向电流)，负=低于零点 */
 
   if(phase > CURR_PHASE_W)
   {
     return 0;
   }
-  diff_mv = (int32_t)curr_adc_get_mv(phase) - (int32_t)CURR_ADC_BIAS_MV;
 
-  return (int16_t)((diff_mv * 1000L) / ((int32_t)CURR_ADC_RSENSE_MOHM
-                                        * (int32_t)CURR_ADC_GAIN));
+  delta_code = (int32_t)curr_adc_get_raw(phase) - (int32_t)s_offset_code[phase];
+
+  /* 分子最大 4095×33000 ≈ 1.35e8，在 int32 内，不会溢出 */
+  return (int16_t)((delta_code * CURR_ADC_MA_SCALE) / (int32_t)CURR_ADC_RES_MAX);
 }

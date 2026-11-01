@@ -3,15 +3,17 @@
   * @file    usart_log.c
   * @brief   UART4 串口驱动 + 日志打印（AT32F435RGT7，PH2=RX / PH3=TX）
   *
-  *  一、硬件依据
-  *    AT32F435/437 参考手册 Table 6-8（Port H 复用表）：
-  *      PH2：MUX8 = UART4_RX   （其余可用功能为 TMR5_CH1 / I2C2_SCL / QSPI1_IO0）
-  *      PH3：MUX8 = UART4_TX   （其余可用功能为 TMR5_CH2 / I2C2_SDA / QSPI1_IO1）
-  *    结论：这两个引脚与 UART4 的收发方向是【硬绑定】的，PH2 只能收、PH3 只能发。
-  *
-  *    ⚠ 板级风险提示：STM32F405RGT6 的 31/35 脚是 VCAP_1/VCAP_2（外挂 2.2uF 到地）。
-  *      若本板由 F405 电路直接改型而来，请确认 PH2/PH3 上没有对地电容，
-  *      否则串口波形会被电容滤掉，表现为"能发但对方收不到"。
+ *  一、硬件依据（已全部对照本板原理图与网表核实）
+ *    1) AT32F435/437 参考手册 Table 6-8（Port H 复用表）：
+ *         PH2：MUX8 = UART4_RX   （其余可用功能为 TMR5_CH1 / I2C2_SCL / QSPI1_IO0）
+ *         PH3：MUX8 = UART4_TX   （其余可用功能为 TMR5_CH2 / I2C2_SDA / QSPI1_IO1）
+ *       这两个引脚与 UART4 的收发方向是【硬绑定】的，PH2 只能收、PH3 只能发。
+ *    2) 原理图 U17（AT32F435RGT7，LQFP64）符号：47 脚 = PH2，31 脚 = PH3。
+ *    3) 网表连接：
+ *         PH3(31) —— R24 100Ω —— KT6368A.7（模块 RX）
+ *         PH2(47) —— R20 100Ω —— KT6368A.8（模块 TX）
+ *       两条网络上都没有任何对地电容，接线是正确交叉的。
+ *    4) KT6368A 出厂默认 UART 为 115200-8-N-1，与本驱动默认值一致。
   *
   *  二、实现要点
   *    1) 发送：轮询 TDBE 阻塞发送，简单可靠、不占用中断；发送完毕等 TDC 置位。
@@ -40,6 +42,37 @@ static volatile uint16_t s_rx_tail = 0U;   /* 读出位置（线程内更新） 
 /* ---- 打印缓冲与重入标志 -------------------------------------------------- */
 static char             s_log_buffer[USART_LOG_TX_BUF_SIZE];
 static volatile uint8_t s_log_busy = 0U;   /* 0=空闲  1=正在格式化/发送 */
+
+/* 初始化完成标志：为 0 时所有发送接口直接返回。
+ * 作用：万一调用方忘记调 usart_log_init()，UART4 时钟没开、寄存器读回 0，
+ * 标志位永远等不到，发送函数会变成死循环把整个线程卡死（曾发生）。
+ * 有了这道闸门，忘记初始化只会"没有输出"，不会拖死系统。 */
+static volatile uint8_t s_initialized = 0U;
+
+/* 等待标志的超时次数（纯计数，不依赖系统 tick）。
+ * 115200 下单字节的 TDBE/TDC 最长约 87us，288MHz 下此值约 1.7ms，
+ * 留了 20 倍裕量；即使超时也只是丢一个字节，绝不阻塞调用者。 */
+#define USART_LOG_WAIT_TIMEOUT   100000U
+
+/**
+  * @brief  等待 UART4 的某个标志置位（带超时保护）
+  * @param  flag: 例如 USART_TDBE_FLAG / USART_TDC_FLAG
+  * @retval 1=等到了  0=超时（外设异常或未初始化）
+  */
+static uint8_t usart_wait_flag(uint32_t flag)
+{
+  uint32_t retry = USART_LOG_WAIT_TIMEOUT;
+
+  while (usart_flag_get(USART_LOG_UART, flag) == RESET)
+  {
+    if (--retry == 0U)
+    {
+      return 0U;
+    }
+  }
+
+  return 1U;
+}
 
 /**
   * @brief  初始化 UART4：PH2=RX、PH3=TX、开接收中断
@@ -79,12 +112,44 @@ void usart_log_init(uint32_t baudrate)
   gpio_init_struct.gpio_pull           = GPIO_PULL_UP;
   gpio_init(USART_LOG_GPIO, &gpio_init_struct);
 
-  /* ---- 5. UART4：8-N-1，库函数内部按 APB1 时钟自动算 BRR ---- */
+  /* ---- 5. UART4 参数：8-N-1，库函数内部按 APB1 时钟自动算 BRR ---- */
   usart_init(USART_LOG_UART, baudrate, USART_DATA_8BITS, USART_STOP_1_BIT);
 
-  /* ---- 6. 开接收中断：优先级 6（低于 PWM/ADC 的 2，避免抢控制环） ---- */
+  /* ---- 6. 使能收发器 + 串口模块 ----
+   * ⚠ 关键：AT32 固件库的 usart_init() 只配置波特率/数据位/停止位，
+   *   【不会】置位 UEN / TDBEEN / RDBFEN，必须在这里单独使能。
+   *   漏掉这三行 → 模块不工作 → 数据写进 dt 寄存器但引脚上没有任何波形，
+   *   现象就是"程序在跑，串口一个字节都发不出来"。 */
+  usart_transmitter_enable(USART_LOG_UART, TRUE);   /* 发送使能：TDBEEN */
+  usart_receiver_enable(USART_LOG_UART, TRUE);      /* 接收使能：RDBFEN */
+  usart_enable(USART_LOG_UART, TRUE);               /* 模块使能：UEN     */
+
+  /* ---- 7. 开接收中断：优先级 6（低于 PWM/ADC 的 2，避免抢控制环） ---- */
   usart_interrupt_enable(USART_LOG_UART, USART_RDBF_INT, TRUE);
   nvic_irq_enable(UART4_IRQn, 6, 0);
+
+  /* ---- 8. 置就绪标志：此后发送接口才允许访问 UART4 ---- */
+  s_initialized = 1U;
+}
+
+/**
+  * @brief  运行时修改波特率
+  * @param  baudrate: 新波特率（0 则忽略）
+  * @note   usart_init() 只重算 baudr 与数据格式位，不会清 UEN/TEN/REN，
+  *         因此无需重新使能、也不会影响引脚复用配置。
+  * @retval none
+  */
+void usart_log_set_baud(uint32_t baudrate)
+{
+  if ((s_initialized == 0U) || (baudrate == 0U))
+  {
+    return;
+  }
+
+  /* 等上一字节彻底发完再改分频，避免把正在移出的帧截断 */
+  (void)usart_wait_flag(USART_TDC_FLAG);
+
+  usart_init(USART_LOG_UART, baudrate, USART_DATA_8BITS, USART_STOP_1_BIT);
 }
 
 /**
@@ -94,10 +159,19 @@ void usart_log_init(uint32_t baudrate)
   */
 void usart_log_putc(uint8_t ch)
 {
-  while (usart_flag_get(USART_LOG_UART, USART_TDBE_FLAG) == RESET)
+  /* 未初始化：静默丢弃。绝不访问未开时钟的外设，否则读取标志恒为 0，
+   * 下面的等待会变成死循环（这正是之前 main 线程卡死的原因）。 */
+  if (s_initialized == 0U)
   {
-    /* 等待发送数据缓冲空 */
+    return;
   }
+
+  /* 等发送缓冲空；超时则丢弃本字节，保证调用者一定返回 */
+  if (usart_wait_flag(USART_TDBE_FLAG) == 0U)
+  {
+    return;
+  }
+
   usart_data_transmit(USART_LOG_UART, ch);
 }
 
@@ -111,7 +185,7 @@ void usart_log_write(const uint8_t *data, uint16_t len)
 {
   uint16_t index;
 
-  if (data == NULL)
+  if ((s_initialized == 0U) || (data == NULL))
   {
     return;
   }
@@ -121,10 +195,8 @@ void usart_log_write(const uint8_t *data, uint16_t len)
     usart_log_putc(data[index]);
   }
 
-  /* 等最后一字节完全发送出去（TDC），保证调用者返回后数据已上线 */
-  while (usart_flag_get(USART_LOG_UART, USART_TDC_FLAG) == RESET)
-  {
-  }
+  /* 等最后一字节完全发送出去（TDC），带超时：即使外设异常也不会僵死 */
+  (void)usart_wait_flag(USART_TDC_FLAG);
 }
 
 /**
