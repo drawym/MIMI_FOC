@@ -28,7 +28,7 @@
 #define CURR_ADC_SAMPLETIME  ADC_SAMPLETIME_47_5
 
 /* ADC 参考电压（mV），用于码值→毫伏换算 */
-#define CURR_ADC_VREF_MV     3300UL
+#define CURR_ADC_VREF_MV     3300UL   //取3300是因为采样电阻是5m，是m级别，而宏定义定义的是5m，单位是mΩ，换算成mV时需要乘以1000，所以取3300
 #define CURR_ADC_RES_MAX     4095UL   /* 12 位 */
 
 /* ---- 电流换算参数（对应底板采样电路，移植时按实际改这里） ----
@@ -55,7 +55,7 @@
  * 这里预先算成整数比例：mA = delta_code × CURR_ADC_MA_SCALE / CURR_ADC_RES_MAX
  * 当前参数下 = 3300×1000/(5×20) = 33000 → 1 码 ≈ 8.06mA
  * （换 A2 档增益 50 时自动变成 13200 → 1 码 ≈ 3.22mA，无需改公式） */
-#define CURR_ADC_MA_SCALE   ((int32_t)CURR_ADC_VREF_MV * 1000L / \
+#define CURR_ADC_MA_SCALE   ((int32_t)CURR_ADC_VREF_MV / \
                              ((int32_t)CURR_ADC_RSENSE_MOHM * (int32_t)CURR_ADC_GAIN))
 
 /* ---- 零点标定参数 --------------------------------------------------------- */
@@ -250,23 +250,12 @@ uint16_t curr_adc_get_mv(uint8_t phase)
 }
 
 /**
-  * @brief  取某相电流（毫安，带符号：正=流出母线，负=回流）
-  * @note   直接用码值计算，不做"码值→mV→电流"的两次整数除法，
-  *         避免中间一步向下取整带来的系统性偏小（约 -4mA）：
+  * @brief  取某相电流（安，带符号：正=流出母线，负=回流）
   *           I(mA) = (raw - offset) × VREF_mV × 1000 / (4095 × R × G)
-  *         其中 offset 是 curr_adc_calibrate() 实测的零点码值，
-  *         【已经包含 1.65V 偏置】，所以这里不再单独减 1650mV。
-  *         灵敏度：1 码 ≈ 8.06mA（R=5mΩ，G=20）。
-  *         停止且无电流时三相应接近 0mA（标定后应只剩 ±8~16mA 噪声）。
   */
 int16_t curr_adc_get_amp(uint8_t phase)
 {
   int32_t delta_code;   /* 相对零点的码值差：正=高于零点(正向电流)，负=低于零点 */
-
-  if(phase > CURR_PHASE_W)
-  {
-    return 0;
-  }
 
   delta_code = (int32_t)curr_adc_get_raw(phase) - (int32_t)s_offset_code[phase];
 
