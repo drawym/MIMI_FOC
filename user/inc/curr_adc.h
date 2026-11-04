@@ -2,20 +2,27 @@
 #define CURR_ADC_H
 
 /* ============================================================================
- *  curr_adc.h —— 三相电流(电压)中点采样（ADC1）
+ *  curr_adc.h —— 三相电流采样（ADC1 注入组，TMR1_CH4 硬件触发）
  *
  *  引脚：PC0=U相、PC1=V相、PC2=W相 → ADC1_IN10/IN11/IN12
- *  时机：TMR1 CH4 中点中断（顶点前1点，每 PWM 周期一次）里调用
- *        curr_adc_sample()，此时三相电流处于 SVPWM 零矢量中点，
- *        纹波最小，是标准 FOC 电流采样点。
+ *
+ *  采样时序（标准 FOC 做法，全程硬件联动，CPU 不参与触发）：
+ *      TMR1 计数器升到 CCR4（=ARR-1，顶点前1点）
+ *          → CH4 比较事件（硬件直连，不经中断）
+ *          → ADC 注入组自动启动，连续转换 U/V/W 三通道
+ *          → 转换完成置 PCCE 标志
+ *          → 进 ADC1_2_3_IRQHandler
+ *          → 读三相数据 + 调用已注册的回调（foc_step）
+ *
+ *  为什么必须在中点采样：
+ *      零矢量期间三相等电位、线电压为 0，电流纹波是以中点对称的三角波，
+ *      只有在中点采，瞬时值才等于平均值；偏出去就会采到开关沿的共模尖峰。
  *
  *  用法：
- *    main() 里调用一次 curr_adc_init();
- *    中点中断回调（foc_step）顶部调用 curr_adc_sample();
- *    任意线程用 curr_adc_get_raw()/curr_adc_get_mv() 读取。
- *
- *  注：本驱动只做"采集+存储"，不做电流闭环；
- *      采样电阻电压 → 电流 的换算（需要运放增益/偏置）留给上层。
+ *      curr_adc_init();                        // main 里调一次
+ *      curr_adc_calibrate();                   // 电机静止时标定零点
+ *      curr_adc_set_done_callback(foc_step);   // 注册 FOC 步进函数
+ *      // 之后无需任何轮询，中断会自动驱动 foc_step
  * ==========================================================================*/
 
 #include "at32f435_437.h"
@@ -26,17 +33,34 @@
 #define CURR_PHASE_W   2
 
 /**
-  * @brief  初始化 ADC1：PC0/1/2 → IN10/11/12，普通组 3 通道序列
-  * @note   软件触发（禁用硬件触发）；ADC 时钟 = HCLK/8 = 36MHz；
-  *         含上电校准。main 里调一次。
+  * @brief  初始化 ADC1 注入组：PC0/1/2 → IN10/11/12，3 通道序列
+  * @note   触发源 = TMR1_CH4 上升沿（周期中点）；ADC 时钟 = HCLK/8 = 36MHz；
+  *         含上电自校准。末尾会打开 PCCE 中断并配置 NVIC。main 里调一次。
   * @retval none
   */
 void curr_adc_init(void);
 
 /**
-  * @brief  采样三相一次（必须在 TMR1 中点中断里调用）
-  * @note   软件触发 3 通道序列，忙等转换完成（约 5us @36MHz），
-  *         结果存入内部数组。读 odt 自动清 OCCE 标志。
+  * @brief  注册"三相数据就绪"回调（在 ADC 中断上下文执行）
+  * @param  cb 回调函数指针；传 NULL 取消注册
+  * @note   回调里禁止阻塞/打印，典型实现就是 FOC 的 foc_step()。
+  *         ADC 中断已经把三相数据读进内部数组，回调里直接用
+  *         curr_adc_get_amp() 取值即可，不需要再触发采样。
+  * @retval none
+  */
+void curr_adc_set_done_callback(void (*cb)(void));
+
+/**
+  * @brief  取注入组自检结果（init 里那次软件触发是否成功）
+  * @retval 1=注入组能正常转换；0=注入组配置或 ADC 供电有问题
+  * @note   运行中 irq 不动时先看它：0 查 ADC 本身，1 查 CH4 触发信号。
+  */
+uint8_t curr_adc_get_self_test(void);
+
+/**
+  * @brief  软件触发一次三相采样并阻塞等待（**仅零点标定使用**）
+  * @note   ⚠ 运行期不要调用：运行期由 TMR1_CH4 硬件触发，
+  *         再插一次软件触发会和硬件触发抢同一个注入组，数据错位。
   * @retval none
   */
 void curr_adc_sample(void);

@@ -47,11 +47,29 @@
 #endif
 
 /* 示波通道缓冲区大小。
- * 10kHz × 6 字节 = 60kB/s，4096 字节约 68ms 的余量，
- * 足够吸收 J-Scope 的读取间隙；加大会多占 RAM（当前 4KB）。 */
+ * 10kHz × 8 字节 = 80kB/s，4096 字节约 51ms 的余量，
+ * 足够吸收上位机的读取间隙；加大会多占 RAM（当前 4KB）。 */
 #ifndef FOC_SCOPE_BUF_SIZE
 #define FOC_SCOPE_BUF_SIZE      4096U
 #endif
+
+/* ---- 帧格式（共 8 字节）---------------------------------------------------
+ *   [0]      0xAA        帧头高字节
+ *   [1]      0x55        帧头低字节
+ *   [2..3]   int16 U 相电流 mA（小端，有符号）
+ *   [4..5]   int16 V 相电流 mA
+ *   [6..7]   int16 W 相电流 mA
+ *
+ * 为什么必须加帧头：
+ *   RTT 为 NO_BLOCK_SKIP 模式，缓冲区满时丢弃的字节数是【任意】的。
+ *   若协议是"定长 6 字节无包头"，只要丢掉 1 个字节，后面所有帧就永久错位，
+ *   接收端把随机字节拼成 int16，看起来就是一堆 0、1 之类的小数字。
+ *   加上固定帧头后，接收端每次找到 AA 55 就能重新对齐，丢多少都能自愈。
+ * ⚠ 改这里必须同步改 script/rtt_to_tcp.py 的 SYNC / FRAME_BYTES。
+ * ------------------------------------------------------------------------- */
+#define FOC_SCOPE_SYNC0          0xAAU
+#define FOC_SCOPE_SYNC1          0x55U
+#define FOC_SCOPE_FRAME_BYTES    8U
 
 /* ---- 符号模式用的影子变量（供 J-Scope Elf 模式按地址读取） ---------------- */
 extern volatile int16_t g_foc_scope_iu;   /* U 相电流 mA */

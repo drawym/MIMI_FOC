@@ -28,6 +28,23 @@
 #define IN_OpenStage                   ((uint8_T)3U)
 #define IN_RunStage                    ((uint8_T)4U)
 
+/* ===== 启动流程参数（手调值，重新导出模型会覆盖，记得同步改模型）=====
+ * 目标：预定位 → 强拖 → 闭环三段平滑衔接，不需要用手扶电机。
+ *
+ * 三条规则：
+ *   1) 强拖速度从 OPEN_RPM_START 线性升到 OPEN_RPM_END，整个 OpenStage 升完，
+ *      起步慢才拖得动（磁拉力有限，速度阶跃会让转子直接失步）；
+ *   2) RunStage 的角速度必须【等于】OPEN_RPM_END —— 切换瞬间频率连续；
+ *   3) 切换时还要把累积相位交接过去（见 case IN_OpenStage），否则磁场突变。
+ *
+ * 改转速只需动两个 RPM 宏，rad/s 由 ×2π/60 自动换算。
+ * 0.10471976F = 2π/60，把 rpm 换成机械角速度 rad/s。 */
+#define OPEN_RPM_START        10.0F     /* 强拖起始转速：极慢，先让转子跟住 */
+#define OPEN_RPM_END          60.0F     /* 强拖终速，同时也是闭环转速（电频率 7Hz） */
+#define OPEN_W_START         (OPEN_RPM_START * 0.10471976F)  /* ≈ 2.09 rad/s */
+#define OPEN_W_END           (OPEN_RPM_END   * 0.10471976F)  /* ≈ 12.57 rad/s */
+#define OPEN_RAMP_DIV        (1.0F / 30000.0F)               /* OpenStage 共 30000 拍 = 3s */
+
 /* Exported block signals */
 real32_T ThetaOpen;                    /* '<S1>/Merge' */
 
@@ -35,11 +52,19 @@ real32_T ThetaOpen;                    /* '<S1>/Merge' */
 
 /* Definition for custom storage class: Struct */
 CurrKPKI_type CurrKPKI = {
-  /* CurrKi */
-  25.0F,
+  /* CurrKi = 2040：与 CurrKp 一起满足零极点对消 Ki/Kp = R/L = 2833，
+   * 对应电流环带宽 Kp/L = 0.688/0.0009 ≈ 764 rad/s ≈ 122Hz。
+   *
+   * ⚠ 为什么不能用原来那组 Kp=0.09 / Ki=25：
+   *   那组带宽只有 15.9Hz，而电机 120rpm 的基波频率就有 14Hz ——
+   *   电流环在基波频率处增益只剩 75%、相位滞后 41°，
+   *   定子电流矢量被"拉扁+拖后"，旋转磁场不再是匀速圆，
+   *   转矩脉动直接把转子拽得左右晃。
+   *   电流环带宽至少要做到基波频率的 10 倍，才谈得上"跟得上"。 */
+  2040.0F,
 
   /* CurrKp */
-  0.09F
+  0.688F
 };
 
 motor_type motor = {
@@ -227,6 +252,7 @@ void currloop0_step(void)
   real32_T rtb_SinCos1;
   real32_T rtb_Sum;
   real32_T rtb_Switch;
+  real32_T rtb_OpenMechW;   /* 强拖阶段当前机械角速度（rad/s），带斜坡，非模型原始变量 */
   int8_T tmp;
   int8_T tmp_0;
 
@@ -264,7 +290,9 @@ void currloop0_step(void)
   } else {
     switch (rtDW.is_c3_currloop0) {
      case IN_AlignStage:
-      if (rtDW.temporalCounter_i1 >= 1000) {
+      /* 预定位时长：原 1000 拍（0.1s），转子还没稳就进强拖，容易一上来就抖。
+       * 改 3000 拍（0.3s），给转子足够时间对齐到已知角度。 */
+      if (rtDW.temporalCounter_i1 >= 3000) {
         rtDW.temporalCounter_i1 = 0U;
         rtDW.is_c3_currloop0 = IN_OpenStage;
         rtDW.ZReset = 0.0;
@@ -290,6 +318,14 @@ void currloop0_step(void)
         rtDW.is_c3_currloop0 = IN_IDLE;
       } else if (rtDW.temporalCounter_i1 >= 30000) {
         rtDW.is_c3_currloop0 = IN_RunStage;
+        /* ---- 关键：切换瞬间把累积的电角度交接给闭环积分器 ----
+         * 强拖用 DiscreteTimeIntegrator_DSTATE（<S7>），
+         * 闭环用 DiscreteTimeIntegrator1_DSTATE（<S8>），是两个独立变量。
+         * 不做交接的话，闭环从 S8 的旧值（通常是 0）重新起算，
+         * ThetaOpen 会从强拖末尾的角度【瞬间跳回 0】——
+         * 磁场方向突变，转子被猛拽一下，这就是"切闭环要用手扶"的另一个原因。
+         * 两者都是电角度（rad，已乘过 Pn），直接赋值即可保证相位连续。 */
+        rtDW.DiscreteTimeIntegrator1_DSTATE = rtDW.DiscreteTimeIntegrator_DSTATE;
       } else {
         rtDW.ZReset = 1.0;
         rtDW.Motor_state = 3.0;
@@ -404,8 +440,16 @@ void currloop0_step(void)
      *  Gain: '<S7>/Gain'
      *  Product: '<S7>/Product'
      */
-    rtDW.DiscreteTimeIntegrator_DSTATE += motor.Pn * 41.8879F * 0.333333343F *
-      0.0001F;
+    /* ---- 强拖角速度：带斜坡 ----
+     * temporalCounter_i1 在本阶段从 0 数到 30000，正好当时间轴用：
+     *   第 0 拍    → OPEN_W_START（20rpm，很慢，先让转子跟住）
+     *   第 30000 拍 → OPEN_W_END（120rpm，与闭环同速）
+     * 中间线性插值，3 秒平滑升速。
+     * 为什么必须斜坡：I/F 控制的磁拉力有限，速度阶跃会让转子直接失步，
+     * 表现出来就是"原地抖、转不起来、要用手扶"。 */
+    rtb_OpenMechW = OPEN_W_START + (OPEN_W_END - OPEN_W_START)
+                    * ((real32_T)rtDW.temporalCounter_i1 * OPEN_RAMP_DIV);
+    rtDW.DiscreteTimeIntegrator_DSTATE += motor.Pn * rtb_OpenMechW * 0.0001F;
     if (rtDW.ZReset > 0.0) {
       rtDW.DiscreteTimeIntegrator_PrevRese = 1;
       rtDW.DiscreteTimeIntegrator1_PrevRes = 1;
@@ -455,7 +499,11 @@ void currloop0_step(void)
     /* Update for DiscreteIntegrator: '<S8>/Discrete-Time Integrator1' incorporates:
      *  Gain: '<S8>/Gain'
      */
-    rtDW.DiscreteTimeIntegrator1_DSTATE += motor.Pn * 41.8879F * 0.0001F;
+    /* RunStage（闭环）角速度 = OPEN_W_END，与强拖终速完全相同。
+     * 这样切换瞬间频率连续，不会把转子甩掉。
+     * 需要改运行转速：只改文件顶部的 OPEN_RPM_END 一处即可，
+     * 强拖斜坡终点会自动跟着变，两边永远同步。 */
+    rtDW.DiscreteTimeIntegrator1_DSTATE += motor.Pn * OPEN_W_END * 0.0001F;
 
     /* End of Outputs for SubSystem: '<S1>/If Action Subsystem3' */
     break;

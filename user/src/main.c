@@ -6,6 +6,7 @@
 #include "usart_log.h"      /* 调试串口：UART4（PH2=RX / PH3=TX） */
 #include "foc_scope.h"      /* 电流示波：中断直接写 RTT 通道 1（J-Scope） */
 #include "currloop0.h"      /* Simulink 生成：电流闭环（Clark/Park/双PI/SVPWM/状态机） */
+#include "vf_start.h"       /* V/F 开环启动：预定位 + 10s 升频，跑完再切闭环 */
 #include "at32f435_437.h"
 #include <string.h>         /* memset：停机时清零模型状态 */
 
@@ -17,7 +18,24 @@
  * ------------------------------------------------------------------------- */
 #define V_BUS_VOLT          12.0f
 
+/* 电流换算：curr_adc_get_amp() 返回【毫安】，Simulink 模型的 rtU.ia/ib/ic 要【安培】。
+ * ⚠ 这个 ×0.001 绝对不能省：
+ *   漏掉它，模型会把 500mA 当成 500A，反馈比给定大 1000 倍，
+ *   电流环一进闭环就把输出打到反向饱和 —— 表现是电机没力、抽搐、发烫。 */
+#define MA_TO_A             0.001f
+
 static volatile uint8_t s_motor_run = 0;   /* 0=停止  1=运行（按键线程写、中点中断读） */
+
+/* ===== 运行阶段 =====
+ * 启动流程刻意分成两段，而不是让 currloop0 自己从静止拖：
+ *   VF：电压开环，鲁棒性高，负责把转子从静止拖到目标转速；
+ *   闭环：电流环接手，此时反电动势已经建立，电流环容易稳住。
+ * 这样避开了 I/F 从静止启动时"电流环带宽不够、磁场畸变、转子乱晃"的问题。 */
+#define RUN_PHASE_STOP      0U   /* 停止 */
+#define RUN_PHASE_VF        1U   /* V/F 开环强拖（10.5 秒） */
+#define RUN_PHASE_CLOSED    2U   /* 电流闭环 */
+
+static volatile uint8_t s_run_phase = RUN_PHASE_STOP;
 
 
 /* ===== 启动诊断打点（排查卡死用，定位后可以整段删掉） =====
@@ -44,32 +62,70 @@ static void foc_step(void)
 
     s_foc_irq_cnt++;     /* 心跳：主循环读它判断中断是否在跑 */
 
-    /* ---- 0. 停机分支：清状态 + 零矢量，直接返回 ----
-     * 注意：这里是【每个 100us 都清一次】，而不是只在下降沿清。
-     * 因为 memset 只有 56 字节，代价可忽略，但换来"永远不会带着脏状态启动"。
-     * 它同时把 is_active_c3_currloop0 清 0，下次 step 时状态机会自动回到 IDLE。 */
+    /* ---- 0. 停机分支 ----
+     * 只在"从运行态切到停止"的这一拍做一次清理，不是每拍都清：
+     *   - 清 rtDW：把状态机、PI 积分器、角度积分器全部归零
+     *   - 复位 VF 阶段，下次启动重新走预定位
+     * 不做的话，下次启动会带着上次的状态直接从 RunStage 开始。 */
     if (s_motor_run == 0U)
     {
+        if (s_run_phase != RUN_PHASE_STOP)
+        {
+            memset(&rtDW, 0, sizeof(rtDW));
+            vf_start_reset();
+            s_run_phase = RUN_PHASE_STOP;
+        }
         return;
     }
 
-    /* ---- 1. 中点采样三相电流（约 5us 忙等） ---- */
-    curr_adc_sample();
-
+    /* ---- 1. 取三相电流 ----
+     * 数据已经在 ADC1_2_3 中断的最开头读进 s_curr_raw 了（硬件触发那次转换），
+     * 这里只做码值→mA 的换算，既不触发采样、也不忙等。
+     * 采样动作本身发生在进入本函数之前，由 TMR1_CH4 硬件完成。 */
     current_u = curr_adc_get_amp(CURR_PHASE_U);
     current_v = curr_adc_get_amp(CURR_PHASE_V);
     current_w = curr_adc_get_amp(CURR_PHASE_W);
 
-    // /* RTT 示波：只存数不打印（printf 会把 100us 的控制周期打崩） */
-    // foc_scope_push(current_u, current_v, current_w);
+    /* RTT 示波：只存数不打印（printf 会把 100us 的控制周期打崩） */
+    foc_scope_push(current_u, current_v, current_w);
 
-    /* ---- 2. 填模型输入（接口就是 rtU 这一组结构体） ---- */
-    rtU.ia = (float)current_u ;   /* 安培 */
-    rtU.ib = (float)current_v ;   /* 安培 */
-    rtU.ic = (float)current_w ;   /* 安培 */
+    /* ---- 2. V/F 开环阶段：电压直接驱动，不经过电流环 ----
+     * 这一段是"把转子从静止拖到目标转速"，用电压开环而不是电流闭环，
+     * 因为开环不依赖反馈，转子跟得上就转，跟不上的时也不会被错误反馈带偏。 */
+    if (s_run_phase == RUN_PHASE_VF)
+    {
+        vf_start_step();   /* 内部算角度、电压、SVPWM，直接写三相 CCR */
 
+        if (vf_start_finished() != 0U)
+        {
+            /* ---- 切闭环：手动把状态机置到 RunStage，跳过模型自带的
+             *      预定位和强拖（那两段是给冷启动用的，这里已经转起来了）---- */
+            rtDW.is_active_c3_currloop0 = 1U;   /* 标记 Chart 已激活 */
+            rtDW.is_c3_currloop0 = 4U;          /* IN_RunStage = 4 */
 
-    /* ---- 3. 跑电流环 ---- */
+            /* 相位交接：VF 的电角度直接交给闭环积分器。
+             * 两边单位都是"电角度 rad"，不需要再乘极对数，直接赋值即可。
+             * 不做这一步，闭环会从 0 重新起算，切换瞬间磁场突变、转子被猛拽。 */
+            rtDW.DiscreteTimeIntegrator1_DSTATE = vf_start_get_theta();
+
+            /* PI 积分器清零：从 0 开始建立，避免带着上一段的残留冲击 */
+            rtDW.Integrator_DSTATE   = 0.0f;
+            rtDW.Integrator_DSTATE_b = 0.0f;
+            rtDW.temporalCounter_i1  = 0U;
+
+            s_run_phase = RUN_PHASE_CLOSED;
+        }
+        return;
+    }
+
+    /* ---- 3. 电流闭环阶段 ----
+     * 填模型输入：curr_adc_get_amp() 返回 mA，模型要 A，必须乘 MA_TO_A。 */
+    rtU.ia = (float)current_u * MA_TO_A;
+    rtU.ib = (float)current_v * MA_TO_A;
+    rtU.ic = (float)current_w * MA_TO_A;
+    rtU.v_bus       = V_BUS_VOLT;
+    rtU.Motor_OnOff = 1.0f;
+
     currloop0_step();
 
     /* ---- 4. 输出三相 CCR ---- */
@@ -105,23 +161,29 @@ static void b_on_key1_click(app_key_id_t key, flex_button_event_t event)
 {
     (void)key;
     (void)event;
-    s_motor_run = 1U;
 
-    rtU.v_bus = V_BUS_VOLT;                /* 母线电压 V */
-    /* ⚠ 生成代码里判断的是 rtU.Motor_OnOff == 1.0F（浮点严格相等），
-     *   必须给 1.0f，给 0.999f 或 2 都会让状态机永远进不了启动分支。 */
-    rtU.Motor_OnOff = 1.0f;
+    vf_start_begin();            /* 复位 VF 角度和计时，从预定位重新开始 */
+    s_run_phase = RUN_PHASE_VF;  /* 先进 VF 开环，10.5 秒后自动切闭环 */
 
-    SEGGER_RTT_printf(0, "s_motor_run\n");
+    rtU.v_bus = V_BUS_VOLT;      /* 母线电压 V */
+    rtU.Motor_OnOff = 1.0f;      /* 模型判 Motor_OnOff == 1.0F，必须给精确值 */
+
+    s_motor_run = 1U;            /* 最后才放开运行标志，避免中断先跑一步 */
+
+    SEGGER_RTT_printf(0, "start: VF phase\n");
 }
 
-/* 线程 B 收到 KEY2 单击：暂停电机（三相回零矢量，θ 保留） */
+/* 线程 B 收到 KEY2 单击：暂停电机（三相回零矢量） */
 static void b_on_key2_click(app_key_id_t key, flex_button_event_t event)
 {
     (void)key;
     (void)event;
-    s_motor_run = 0U;
+
+    s_motor_run = 0U;            /* 先停运行标志，中断里就不会再写 CCR 了 */
+    s_run_phase = RUN_PHASE_STOP;
+
     memset(&rtDW, 0, sizeof(rtDW));   /* 清状态机 + 所有积分器 */
+    vf_start_reset();                 /* 复位 VF 阶段 */
 
     motor_stop_output();
     SEGGER_RTT_printf(0, "motor_stop_output\n");
@@ -166,6 +228,8 @@ int main(void)
 
     /* ----  三相电流采样初始化：PC0/1/2 → ADC1_IN10/11/12 ---- */
     curr_adc_init();
+    /* 自检结果直接打出来：0=注入组本身没转起来，1=ADC 正常（问题在 CH4 触发） */
+    SEGGER_RTT_printf(0, "[ADC] selftest=%d\n", (int)curr_adc_get_self_test());
     BOOT_MARK(3);
 
 
@@ -183,9 +247,14 @@ int main(void)
     rtU.Motor_OnOff = 0.0f;         /* 0=停机 1=运行（由 foc_step 按 s_motor_run 写） */
     BOOT_MARK(4);
 
-    /* ---- 3. 中点 FOC 回调（10kHz 中断里跑电流闭环） ---- */
-    tmr1_pwm_set_midpoint_cb(foc_step);
-    BOOT_MARK(5);   /* 到这里中断回调已挂上，之后每次中断都会累加 s_foc_irq_cnt */
+    /* ---- 3. 注册 FOC 步进（由 ADC 转换完成中断驱动） ----
+     * 整条链路全靠硬件串起来：
+     *   TMR1 计数到 ARR-1 → CH4 比较事件 → ADC 注入组自动转换 3 通道
+     *   → 转换完成置 PCCE → 进 ADC1_2_3_IRQHandler（读数据）
+     *   → 调用本回调 foc_step（算 Clark/Park/PI/SVPWM→写 CCR）
+     * CPU 既不触发、也不等待，ADC 不工作时中断根本不来，不会死锁。 */
+    curr_adc_set_done_callback(foc_step);
+    BOOT_MARK(5);   /* 到这里 FOC 回调已挂上，之后每次 ADC 转换完成都会进来 */
 
 
     /* ---- 3.51 零点标定（必须在电机静止时做） ----
@@ -207,10 +276,10 @@ int main(void)
     }
     BOOT_MARK(6);   /* 到这里说明 ADC 标定的 256 次采样全部完成，ADC 没死等 */
 
-    // /* ---- 3.55 电流示波通道：注册 RTT 通道 1（J-Scope 用，10kHz 全采样） ----
-    //  *  RTT -> VOFA */
-    // foc_scope_init();
-    // BOOT_MARK(8);
+    /* ---- 3.55 电流示波通道：注册 RTT 通道 1（J-Scope 用，10kHz 全采样） ----
+     *  RTT -> VOFA */
+    foc_scope_init();
+    BOOT_MARK(8);
 
     /* ---- 4. 按键：全局初始化（GPIO + 扫描线程），只调一次 ---- */
     app_key_begin();
@@ -231,10 +300,13 @@ int main(void)
 
     while (1)
     {
-        SEGGER_RTT_printf(0, "irq=%u tABC=%d,%d,%d run=%d\n",
+        SEGGER_RTT_printf(0, "irq=%u tABC=%d,%d,%d run=%d I=%d,%d,%d mA\n",
                           (unsigned)s_foc_irq_cnt,
                           (int)rtY.tABC[0], (int)rtY.tABC[1], (int)rtY.tABC[2],
-                          (int)s_motor_run);
+                          (int)s_motor_run,
+                          (int)curr_adc_get_amp(CURR_PHASE_U),
+                          (int)curr_adc_get_amp(CURR_PHASE_V),
+                          (int)curr_adc_get_amp(CURR_PHASE_W));
         rt_thread_mdelay(500);
     }
 }

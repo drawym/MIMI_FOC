@@ -51,19 +51,38 @@
 #define CURR_ADC_BIAS_CODE   ((int16_t)(((int32_t)CURR_ADC_BIAS_MV * (int32_t)CURR_ADC_RES_MAX \
                                          + (int32_t)CURR_ADC_VREF_MV / 2) / (int32_t)CURR_ADC_VREF_MV))
 
-/* 每码值对应的电流（mA）：VREF_mV × 1000 / (满码 × R × G) 的分子部分。
- * 这里预先算成整数比例：mA = delta_code × CURR_ADC_MA_SCALE / CURR_ADC_RES_MAX
+/* 每码值对应的电流（mA）：分子 = VREF_mV × 1000 / (R × G)。
+ * 换算公式：mA = delta_code × CURR_ADC_MA_SCALE / 4095
  * 当前参数下 = 3300×1000/(5×20) = 33000 → 1 码 ≈ 8.06mA
- * （换 A2 档增益 50 时自动变成 13200 → 1 码 ≈ 3.22mA，无需改公式） */
-#define CURR_ADC_MA_SCALE   ((int32_t)CURR_ADC_VREF_MV / \
+ * （换 A2 档增益 50 时自动变成 13200 → 1 码 ≈ 3.22mA，无需改公式）
+ *
+ * ⚠ 这里的 ×1000L 绝对不能少：
+ *   分子是"毫伏 × 1000 / (mΩ × 增益)"，漏掉 1000 的话 SCALE 会变成 33，
+ *   而结果是整数除法 —— delta_code 小于 125 时商全是 0，
+ *   也就是【电流小于 1A 时读数全部显示 0】，看起来像 ADC 没工作。
+ */
+#define CURR_ADC_MA_SCALE   (((int32_t)CURR_ADC_VREF_MV * 1000L) / \
                              ((int32_t)CURR_ADC_RSENSE_MOHM * (int32_t)CURR_ADC_GAIN))
 
 /* ---- 零点标定参数 --------------------------------------------------------- */
 #define CURR_ADC_CAL_SAMPLES  256U   /* 标定采样次数：256×100us = 25.6ms，覆盖 256 个 PWM 周期 */
 #define CURR_ADC_CAL_TOL_CODE 150U   /* 零点允许偏离标称值的码数；超出判为异常（≈1.2A） */
 
-/* 三相采样结果（最近一次中点采样的原始码值） */
+/* ---- 标定用阻塞采样的等待上限 ----------------------------------------------
+ * 只在 curr_adc_calibrate() 里用，运行期采样走硬件触发+中断，不需要这个。
+ * 2000 次空转约 30~40us（每次约 5 个时钟 @288MHz），比 100us 周期短。 */
+#define CURR_ADC_WAIT_MAX     2000U
+
+/* 三相采样结果（最近一次转换的原始码值，由 ADC 中断写入） */
 static uint16_t s_curr_raw[3] = {0U, 0U, 0U};
+
+/* ADC 转换完成回调：由 main.c 注册为 foc_step。
+ * 放在这里而不是直接 extern foc_step，是为了让本驱动不依赖上层业务。 */
+static void (*s_done_cb)(void) = (void *)0;
+
+/* 注入组自检结果：1=软件触发能正常转换；0=注入组配置或 ADC 供电有问题。
+ * 在 curr_adc_init() 里做一次，供上层打印，用于快速区分故障来源。 */
+static uint8_t s_self_test_ok = 0U;
 
 /* 三相零点码值：上电标定后写入；初值为标称 2048，未标定时也能正常工作 */
 static uint16_t s_offset_code[3] = {(uint16_t)CURR_ADC_BIAS_CODE,
@@ -71,7 +90,9 @@ static uint16_t s_offset_code[3] = {(uint16_t)CURR_ADC_BIAS_CODE,
                                     (uint16_t)CURR_ADC_BIAS_CODE};
 
 /**
-  * @brief  初始化 ADC1 普通组：3 通道序列、软件触发、12 位、校准
+  * @brief  初始化 ADC1 注入组：3 通道序列、TMR1_CH4 硬件触发、12 位、自校准
+  * @note   注入组一次触发连续转换 U/V/W 三通道，转换完成后进 ADC1_2_3 中断，
+  *         由中断服务函数读数据并调用上层回调（main 里注册为 foc_step）。
   * @retval none
   */
 void curr_adc_init(void)
@@ -111,25 +132,24 @@ void curr_adc_init(void)
   adc_base_config(CURR_ADC, &adc_base_struct);
   adc_resolution_set(CURR_ADC, ADC_RESOLUTION_12B);
 
-  /* ---- 5. 普通组通道序列：U→1、V→2、W→3 ---- */
-  adc_ordinary_channel_set(CURR_ADC, CURR_ADC_CH_U, 1, CURR_ADC_SAMPLETIME);
-  adc_ordinary_channel_set(CURR_ADC, CURR_ADC_CH_V, 2, CURR_ADC_SAMPLETIME);
-  adc_ordinary_channel_set(CURR_ADC, CURR_ADC_CH_W, 3, CURR_ADC_SAMPLETIME);
+  /* ---- 5. 注入组序列：U→1、V→2、W→3 ----
+   * 用注入组而不是普通组，因为 AT32 普通组的触发源列表里没有 TMR1_CH4
+   * （只有 CH1/CH2/CH3），而注入组支持 ADC_PREEMPT_TRIG_TMR1CH4。
+   * 这与 STM32 电机库里「TIM1_CH4 → ADC 注入组 → JEOC 中断」是同一套做法，
+   * 而且注入组有独立的完成标志(PCCE)和中断，不会和普通组互相干扰。 */
+  adc_preempt_channel_length_set(CURR_ADC, 3U);
+  adc_preempt_channel_set(CURR_ADC, CURR_ADC_CH_U, 1U, CURR_ADC_SAMPLETIME);
+  adc_preempt_channel_set(CURR_ADC, CURR_ADC_CH_V, 2U, CURR_ADC_SAMPLETIME);
+  adc_preempt_channel_set(CURR_ADC, CURR_ADC_CH_W, 3U, CURR_ADC_SAMPLETIME);
 
-  /* ---- 6. 触发源：禁用硬件触发（EDGE_NONE），只走软件触发 ----
-   * 库的触发源枚举里没有显式"软件"，标准做法是选任意源 + 禁用边沿检测 */
-  adc_ordinary_conversion_trigger_set(CURR_ADC,
-                                      ADC_ORDINARY_TRIG_TMR1CH1,
-                                      ADC_ORDINARY_TRIG_EDGE_NONE);
+  /* ---- 6. 触发源：先禁用边沿 ----
+   * 校准期间即便有触发进来也不能让它动作，否则校准数据会被打乱，
+   * 所以先设 NONE，等自校准完成后再打开。 */
+  adc_preempt_conversion_trigger_set(CURR_ADC,
+                                     ADC_PREEMPT_TRIG_TMR1CH4,
+                                     ADC_PREEMPT_TRIG_EDGE_NONE);
 
-  /* ---- 6.5 关键：OCCE 每通道置位 ----
-   * 默认 eocsfen=0 时，OCCE 只在整条序列(3 通道)全部转换完才置一次位，
-   * 而普通组只有一个数据寄存器 odt，序列结束时只留最后一通道数据，
-   * 逐通道等标志+读 odt 的写法会死等。置 eocsfen=1 后每个通道转换完
-   * 都置 OCCE，读 odt 自动清标志 → 循环才能逐通道收数据。 */
-  adc_occe_each_conversion_enable(CURR_ADC, TRUE);
-
-  /* ---- 7. 使能 + 上电校准 ---- */
+  /* ---- 7. 使能 + 上电自校准 ---- */
   adc_enable(CURR_ADC, TRUE);
   while(adc_flag_get(CURR_ADC, ADC_RDY_FLAG) == RESET);
 
@@ -137,27 +157,128 @@ void curr_adc_init(void)
   while(adc_calibration_init_status_get(CURR_ADC));
   adc_calibration_start(CURR_ADC);
   while(adc_calibration_status_get(CURR_ADC));
+
+  /* ---- 8. 自检：软件触发一次，确认注入组真的能转换 ----
+   * 这一步放在打开硬件触发之前做，此时唯一的触发来源就是软件触发，
+   * 不会有 PWM 的 CH4 事件干扰。
+   * 作用是把故障分成两类，省得到处猜：
+   *   自检失败 → ADC 注入组本身配错了（通道、长度、使能、VDDA）
+   *   自检成功但运行中 irq 一直是 0 → ADC 没问题，是 CH4 触发信号没产生 */
+  {
+    uint32_t wait_cnt = 30000UL;   /* 上限约 500us，只为覆盖最慢的一次转换 */
+
+    adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);
+    adc_preempt_software_trigger_enable(CURR_ADC, TRUE);
+
+    while(adc_flag_get(CURR_ADC, ADC_PCCE_FLAG) == RESET)
+    {
+      if(wait_cnt == 0U)
+      {
+        break;
+      }
+      wait_cnt--;
+    }
+
+    s_self_test_ok = (wait_cnt != 0U) ? 1U : 0U;
+    adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);
+  }
+
+  /* ---- 9. 打开硬件触发：TMR1_CH4 上升沿 ----
+   * CH4 的 CCR4 = ARR-1（顶点前 1 点），触发时刻正好落在零矢量中点。
+   * 从这一行之后，采样启动完全由硬件完成，CPU 不再参与"触发"这个动作。 */
+  adc_preempt_conversion_trigger_set(CURR_ADC,
+                                     ADC_PREEMPT_TRIG_TMR1CH4,
+                                     ADC_PREEMPT_TRIG_EDGE_RISING);
+
+  /* ---- 10. 注入组转换完成中断（PCCE）---- */
+  adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);
+  adc_interrupt_enable(CURR_ADC, ADC_PCCE_INT, TRUE);
+  /* 优先级必须是 1：SEGGER_RTT 的临界区用 BASEPRI=0x20（等于优先级 2）屏蔽中断，
+   * 若设成 2 或更低，主循环一打印就会把这个中断挡在门外，FOC 时序立刻乱。 */
+  nvic_irq_enable(ADC1_2_3_IRQn, 1, 0);
 }
 
 /**
-  * @brief  采样三相一次（在 TMR1 中点中断里调用）
-  * @note   软件触发启动 3 通道序列 → 逐通道等 OCCE 标志 → 读 odt。
-  *         读 odt 会同时清 OCCE 标志（库已确认），所以每次读到的都是新数据。
+  * @brief  注册 ADC 转换完成回调（在 ADC1_2_3 中断上下文执行）
+  * @param  cb 回调函数指针（禁止阻塞/打印；传 NULL 取消）
+  * @retval none
+  */
+void curr_adc_set_done_callback(void (*cb)(void))
+{
+  s_done_cb = cb;
+}
+
+/**
+  * @brief  取注入组自检结果（curr_adc_init 里做的那次软件触发）
+  * @retval 1=注入组能正常转换；0=注入组配置或 ADC 供电有问题
+  * @note   运行中如果 irq 一直不动，先看这个值：
+  *         0 → 问题在 ADC 本身（通道/长度/VDDA）；
+  *         1 → ADC 没问题，是 CH4 的触发信号没送到。
+  */
+uint8_t curr_adc_get_self_test(void)
+{
+  return s_self_test_ok;
+}
+
+/**
+  * @brief  ADC1/2/3 中断服务函数：注入组转换完成 → 读三相数据 → 跑 FOC
+  * @note   进入本中断时，三个通道的转换结果已经躺在 JDT1~JDT3 里了，
+  *         这里只做"搬数据 + 通知上层"，没有任何等待，执行时间恒定。
+  *         这就是硬件触发相比软件轮询最大的好处：CPU 永远不会卡在等标志上。
+  * @retval none
+  */
+void ADC1_2_3_IRQHandler(void)
+{
+  if(adc_flag_get(CURR_ADC, ADC_PCCE_FLAG) != RESET)
+  {
+    adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);   /* 先清标志，避免重复进入 */
+
+    /* 注入组数据寄存器与序列位置一一对应：序列1→JDT1→U相，以此类推 */
+    s_curr_raw[CURR_PHASE_U] = adc_preempt_conversion_data_get(CURR_ADC,
+                                                              ADC_PREEMPT_CHANNEL_1);
+    s_curr_raw[CURR_PHASE_V] = adc_preempt_conversion_data_get(CURR_ADC,
+                                                              ADC_PREEMPT_CHANNEL_2);
+    s_curr_raw[CURR_PHASE_W] = adc_preempt_conversion_data_get(CURR_ADC,
+                                                              ADC_PREEMPT_CHANNEL_3);
+
+    if(s_done_cb != (void *)0)
+    {
+      s_done_cb();
+    }
+  }
+}
+
+/**
+  * @brief  软件触发一次三相采样并阻塞等待（**仅供零点标定使用**）
+  * @note   运行期请勿调用：运行期由 TMR1_CH4 硬件触发 + ADC 中断自动完成，
+  *         这里再插一次软件触发会和硬件触发抢同一个注入组，数据会错位。
+  *         带等待上限，ADC 不响应时最多等约 30us 就返回（沿用上次数据）。
   * @retval none
   */
 void curr_adc_sample(void)
 {
-  uint8_t i;
+  uint32_t wait_cnt;   /* 剩余等待次数，递减到 0 即放弃 */
 
-  adc_ordinary_software_trigger_enable(CURR_ADC, TRUE);  /* 启动序列 */
+  adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);
+  adc_preempt_software_trigger_enable(CURR_ADC, TRUE);
 
-  for(i = 0; i < 3; i++)
+  wait_cnt = CURR_ADC_WAIT_MAX;
+  while(adc_flag_get(CURR_ADC, ADC_PCCE_FLAG) == RESET)
   {
-    while(adc_flag_get(CURR_ADC, ADC_OCCE_FLAG) == RESET)   /* 等本通道转换完成 */
+    if(wait_cnt == 0U)
     {
+      break;          /* 超时：保留上一次的码值，绝不在这里死等 */
     }
-    s_curr_raw[i] = adc_ordinary_conversion_data_get(CURR_ADC);  /* 读 odt 并清标志 */
+    wait_cnt--;
   }
+  adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);
+
+  s_curr_raw[CURR_PHASE_U] = adc_preempt_conversion_data_get(CURR_ADC,
+                                                            ADC_PREEMPT_CHANNEL_1);
+  s_curr_raw[CURR_PHASE_V] = adc_preempt_conversion_data_get(CURR_ADC,
+                                                            ADC_PREEMPT_CHANNEL_2);
+  s_curr_raw[CURR_PHASE_W] = adc_preempt_conversion_data_get(CURR_ADC,
+                                                            ADC_PREEMPT_CHANNEL_3);
 }
 
 /**
@@ -176,10 +297,19 @@ uint8_t curr_adc_calibrate(void)
   uint16_t sample_index;                  /* 采样序号 */
   uint8_t  phase;                         /* 相序号：0=U 1=V 2=W */
   int32_t  deviation_code;                /* 实测零点与标称零点的偏差（码） */
+  uint8_t  is_ok = 1U;                    /* 1=标定有效；0=某相异常，将回退标称值 */
+
+  /* ---- 标定期间必须独占 ADC ----
+   * PWM 每 100us 会触发一次注入组；若不禁用，软件触发和硬件触发会抢同一个
+   * 序列，读出的三相是两次转换混在一起的数据，标定结果直接作废。 */
+  adc_interrupt_enable(CURR_ADC, ADC_PCCE_INT, FALSE);
+  adc_preempt_conversion_trigger_set(CURR_ADC,
+                                     ADC_PREEMPT_TRIG_TMR1CH4,
+                                     ADC_PREEMPT_TRIG_EDGE_NONE);
 
   for (sample_index = 0U; sample_index < CURR_ADC_CAL_SAMPLES; sample_index++)
   {
-    curr_adc_sample();                    /* 三相各采一次，约 5us */
+    curr_adc_sample();                    /* 软件触发一次，三相各采一次 */
 
     for (phase = 0U; phase < 3U; phase++)
     {
@@ -202,18 +332,32 @@ uint8_t curr_adc_calibrate(void)
     if ((deviation_code > (int32_t)CURR_ADC_CAL_TOL_CODE) ||
         (deviation_code < -(int32_t)CURR_ADC_CAL_TOL_CODE))
     {
-      s_offset_code[0] = (uint16_t)CURR_ADC_BIAS_CODE;
-      s_offset_code[1] = (uint16_t)CURR_ADC_BIAS_CODE;
-      s_offset_code[2] = (uint16_t)CURR_ADC_BIAS_CODE;
-      return 0U;
+      is_ok = 0U;
+      break;
     }
   }
 
-  s_offset_code[0] = avg_code[0];
-  s_offset_code[1] = avg_code[1];
-  s_offset_code[2] = avg_code[2];
+  if (is_ok != 0U)
+  {
+    s_offset_code[0] = avg_code[0];
+    s_offset_code[1] = avg_code[1];
+    s_offset_code[2] = avg_code[2];
+  }
+  else
+  {
+    s_offset_code[0] = (uint16_t)CURR_ADC_BIAS_CODE;
+    s_offset_code[1] = (uint16_t)CURR_ADC_BIAS_CODE;
+    s_offset_code[2] = (uint16_t)CURR_ADC_BIAS_CODE;
+  }
 
-  return 1U;
+  /* ---- 归还 ADC：恢复硬件触发 + 完成中断 ---- */
+  adc_flag_clear(CURR_ADC, ADC_PCCE_FLAG);
+  adc_preempt_conversion_trigger_set(CURR_ADC,
+                                     ADC_PREEMPT_TRIG_TMR1CH4,
+                                     ADC_PREEMPT_TRIG_EDGE_RISING);
+  adc_interrupt_enable(CURR_ADC, ADC_PCCE_INT, TRUE);
+
+  return is_ok;
 }
 
 /**

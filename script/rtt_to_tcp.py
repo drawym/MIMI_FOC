@@ -7,8 +7,9 @@ rtt_to_tcp.py  —  把 J-Link RTT 的二进制电流数据转发成本地 TCP �
     串口只有 115200，10kHz 电流数据根本送不出来（14 字节/帧 → 140kB/s，差 12 倍）。
     J-Link 的 RTT 走的是调试口，能到几百 kB/s，但 RTT Viewer 只能看文本，没有波形。
     这个脚本把两者接起来：
-        固件(10kHz) --RTT 通道1 二进制 6B/帧--> 本脚本 --TCP 文本 "u,v,w\\n"--> VOFA+
+        固件(10kHz) --RTT 通道1 二进制 8B/帧--> 本脚本 --TCP 文本 "u,v,w\n" (安培, 浮点)--> VOFA+
     VOFA+ 里照旧用 FireWater 协议、3 通道，不需要装任何新软件。
+    帧长 8 字节 = 2 字节同步头(AA 55) + 3 个 int16(mA)，带同步头才能容忍 RTT 丢字节。
 
 二、用法
     # 1. 不需要硬件，先验证脚本本身（数据是合成的三相正弦）
@@ -40,37 +41,66 @@ import sys
 import threading
 import time
 
-# 每帧字节数：3 个 int16（U/V/W），与固件 foc_scope.c 保持一致
-FRAME_BYTES = 6
+# ---- 帧格式（与固件 user/include/foc_scope.h 严格一致）---------------------
+#   [0]     0xAA      同步头高字节
+#   [1]     0x55      同步头低字节
+#   [2..3]  int16 U 相电流 mA（小端，有符号）
+#   [4..5]  int16 V 相电流 mA
+#   [6..7]  int16 W 相电流 mA
+SYNC0 = 0xAA
+SYNC1 = 0x55
+SYNC_BYTES = bytes((SYNC0, SYNC1))
+FRAME_BYTES = 8
+
+# 输出给 VOFA+ 的单位换算：固件发 mA，上位机显示 A（带 3 位小数）
+MA_TO_A = 0.001
 
 
 # ---------------------------------------------------------------------------
-# 一、帧解析：把任意长度的字节流切成固定 6 字节的样本
+# 一、帧解析：按同步头 AA 55 重新对齐，逐帧取出三相电流
 # ---------------------------------------------------------------------------
 def parse_frames(raw_bytes, leftover):
     """
-    把字节流切成 (iu, iv, iw) 样本列表。
+    把字节流切成 (iu, iv, iw) 样本列表，单位 mA。
 
     :param raw_bytes: 本次新收到的字节
     :param leftover:  上次没凑够一帧的残余字节
     :return: (样本列表, 本次剩余字节)
 
-    协议无包头，只能靠"每帧固定 6 字节"切分。若固件改了帧长，
-    必须同步改 FRAME_BYTES，否则波形整体错位而不是报错。
+    为什么按同步头找而不是按固定长度切：
+        RTT 是 NO_BLOCK_SKIP 模式，缓冲区满时丢弃的字节数是任意的。
+        如果只按"每帧固定 N 字节"切分，一旦丢掉 1 个字节，
+        后面所有帧就永久错位，解析出来全是 0、1 这种随机小数字。
+        带同步头后，每次找 AA 55 重新对齐，丢多少都能自愈。
     """
     buffer = leftover + raw_bytes
-    whole_frames = len(buffer) // FRAME_BYTES
     samples = []
+    pos = 0
 
-    for index in range(whole_frames):
-        base = index * FRAME_BYTES
+    while True:
+        start = buffer.find(SYNC_BYTES, pos)
+
+        if start < 0:
+            # 没有帧头：只保留可能是"半个同步头"的末尾字节
+            keep = buffer[-1:] if buffer.endswith(bytes((SYNC0,))) else b""
+            return samples, keep
+
+        if len(buffer) - start < FRAME_BYTES:
+            # 帧不完整，剩下的是下一帧的开头，留着等下一包
+            return samples, buffer[start:]
+
+        frame = buffer[start:start + FRAME_BYTES]
         # 小端有符号 16 位：signed=True 让负数电流正确还原
-        current_u = int.from_bytes(buffer[base:base + 2], "little", signed=True)
-        current_v = int.from_bytes(buffer[base + 2:base + 4], "little", signed=True)
-        current_w = int.from_bytes(buffer[base + 4:base + 6], "little", signed=True)
+        current_u = int.from_bytes(frame[2:4], "little", signed=True)
+        current_v = int.from_bytes(frame[4:6], "little", signed=True)
+        current_w = int.from_bytes(frame[6:8], "little", signed=True)
         samples.append((current_u, current_v, current_w))
 
-    return samples, buffer[whole_frames * FRAME_BYTES:]
+        # 关键：下一帧从 start+1 重新搜同步头，而不是直接跳到 start+8。
+        # 因为一旦中途丢过字节，真实帧头的位置会比 start+8 更靠前，
+        # 直接跳过去就会把下一帧的头也吞掉，导致连续丢好几帧才恢复。
+        # 从 start+1 搜的代价只是每帧多一次 bytes.find，换来"丢 1 字节只丢 1 帧"。
+        pos = start + 1
 
 
 # ---------------------------------------------------------------------------
@@ -294,7 +324,12 @@ def run(source, port, decimate, csv_path=None, duration=None):
                     continue
 
                 # FireWater 文本：逗号分通道，换行结束一帧
-                lines.append("%d,%d,%d\n" % sample)
+                # 固件发的是 mA 整数，这里换算成安培并保留 3 位小数（1mA 分辨率），
+                # VOFA+ 直接显示浮点电压/电流波形，不用再在界面上做单位换算。
+                lines.append("%.3f,%.3f,%.3f\n"
+                             % (sample[0] * MA_TO_A,
+                                sample[1] * MA_TO_A,
+                                sample[2] * MA_TO_A))
 
             if lines:
                 payload = "".join(lines).encode("ascii")
@@ -327,11 +362,19 @@ def run(source, port, decimate, csv_path=None, duration=None):
 # 五、自检
 # ---------------------------------------------------------------------------
 def run_selftest():
-    """验证帧切分的三种边界：整帧、半帧、跨包拼接。"""
+    """验证帧解析的边界：整帧、半帧、跨包拼接、以及"丢字节后能否自愈"。"""
     failures = 0
 
-    raw = b"".join(int(v).to_bytes(2, "little", signed=True)
-                   for v in (100, -200, 300, -1, 0, 1))
+    def build(values):
+        """按固件格式打包：AA 55 + 3 个 int16 小端"""
+        out = bytearray()
+        for u, v, w in values:
+            out += SYNC_BYTES
+            for item in (u, v, w):
+                out += int(item).to_bytes(2, "little", signed=True)
+        return bytes(out)
+
+    raw = build([(100, -200, 300), (-1, 0, 1)])
 
     samples, rest = parse_frames(raw, b"")
     if samples != [(100, -200, 300), (-1, 0, 1)] or rest != b"":
@@ -340,28 +383,36 @@ def run_selftest():
     else:
         print("用例1 通过：两整帧，负数解析正确")
 
-    samples, rest = parse_frames(raw[:7], b"")
-    if len(samples) != 1 or len(rest) != 1:
+    samples, rest = parse_frames(raw[:10], b"")
+    if len(samples) != 1 or len(rest) != 2:
         print("用例2 失败:", samples, len(rest))
         failures += 1
     else:
-        print("用例2 通过：1 整帧 + 1 字节残余")
+        print("用例2 通过：1 整帧 + 2 字节残余（下一帧的同步头）")
 
-    samples, rest = parse_frames(raw[7:], rest)
+    samples, rest = parse_frames(raw[10:], rest)
     if samples != [(-1, 0, 1)] or rest != b"":
         print("用例3 失败:", samples, rest)
         failures += 1
     else:
         print("用例3 通过：跨包拼接正确")
 
-    extreme = b"".join(int(v).to_bytes(2, "little", signed=True)
-                       for v in (32767, -32768, 0))
-    samples, _ = parse_frames(extreme, b"")
-    if samples != [(32767, -32768, 0)]:
-        print("用例4 失败:", samples)
+    # 关键用例：模拟 RTT 丢字节，验证能否靠同步头重新对齐
+    broken = raw[:5] + raw[6:]
+    samples, rest = parse_frames(broken, b"")
+    if (-1, 0, 1) not in samples:
+        print("用例4 失败：丢字节后未能重新对齐", samples)
         failures += 1
     else:
-        print("用例4 通过：int16 极值正确")
+        print("用例4 通过：丢 1 字节后，后续帧仍能重新对齐")
+
+    extreme = build([(32767, -32768, 0)])
+    samples, _ = parse_frames(extreme, b"")
+    if samples != [(32767, -32768, 0)]:
+        print("用例5 失败:", samples)
+        failures += 1
+    else:
+        print("用例5 通过：int16 极值正确")
 
     print("自检结果：", "全部通过" if failures == 0 else "%d 项失败" % failures)
     return 0 if failures == 0 else 1

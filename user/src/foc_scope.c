@@ -66,17 +66,24 @@ void foc_scope_push(int16_t iu, int16_t iv, int16_t iw)
 
 #if (FOC_SCOPE_USE_RTT != 0)
   {
-    /* 6 字节样本：3 个 int16 连续排列，主机端按同样的顺序切分 */
-    int16_t sample[3];
+    /* 8 字节整帧：2 字节同步头 + 3 个 int16（小端）。
+     * 手工拼字节比 struct 更稳：不用操心编译器对齐/填充，
+     * 也不会因为结构体在别的编译器上变大而导致帧长错位。 */
+    uint8_t frame[FOC_SCOPE_FRAME_BYTES];
 
-    sample[0] = iu;
-    sample[1] = iv;
-    sample[2] = iw;
+    frame[0] = FOC_SCOPE_SYNC0;
+    frame[1] = FOC_SCOPE_SYNC1;
+    frame[2] = (uint8_t)((uint16_t)iu & 0xFFU);   /* U 相低字节 */
+    frame[3] = (uint8_t)((uint16_t)iu >> 8);      /* U 相高字节 */
+    frame[4] = (uint8_t)((uint16_t)iv & 0xFFU);   /* V 相低字节 */
+    frame[5] = (uint8_t)((uint16_t)iv >> 8);      /* V 相高字节 */
+    frame[6] = (uint8_t)((uint16_t)iw & 0xFFU);   /* W 相低字节 */
+    frame[7] = (uint8_t)((uint16_t)iw >> 8);      /* W 相高字节 */
 
     /* NoLock 版本：省掉 RTT 内部的临界区进出，约省 0.5us。
      * 安全性：中断只写通道 1，线程的 printf 只写通道 0，两者操作不同的
      * 缓冲区控制块，不会互相破坏。 */
-    (void)SEGGER_RTT_WriteNoLock(FOC_SCOPE_RTT_CH, sample, sizeof(sample));
+    (void)SEGGER_RTT_WriteNoLock(FOC_SCOPE_RTT_CH, frame, FOC_SCOPE_FRAME_BYTES);
   }
 #endif
 }

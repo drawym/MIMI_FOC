@@ -85,6 +85,18 @@ void tmr1_pwm_init_ex(uint32_t freq_hz, uint16_t deadtime_dtc)
   tmr_output_channel_config(TMR1, TMR_SELECT_CHANNEL_3, &tmr_output_struct);
   tmr_channel_value_set(TMR1, TMR_SELECT_CHANNEL_3, (uint16_t)(period / 2));
 
+  /* ---------- 4.5 比较值预装载（影子寄存器） ----------
+   * 打开后，写 CCR 只是写进"预装载寄存器"，要等下一次更新事件（下溢）
+   * 才搬到真正生效的影子寄存器。
+   * 为什么必须开：FOC 是在 ADC 中断里算完立刻写 CCR 的，那时计数器已经
+   * 从顶点往下走了一段。若不开预装载，新值会立刻生效——如果新 CCR 比当前
+   * CNT 大，本周期会多翻一次电平，PWM 出现不对称的怪脉冲。
+   * 开了之后：本周期的波形保持不变，新占空比从下一个周期整周期生效，
+   * 代价只是延迟一个 PWM 周期（100us）的相位。 */
+  tmr_output_channel_buffer_enable(TMR1, TMR_SELECT_CHANNEL_1, TRUE);
+  tmr_output_channel_buffer_enable(TMR1, TMR_SELECT_CHANNEL_2, TRUE);
+  tmr_output_channel_buffer_enable(TMR1, TMR_SELECT_CHANNEL_3, TRUE);
+
   /* ---------- 5. 死区 + 刹车配置 ---------- */
   tmr_brkdt_default_para_init(&tmr_brkdt_struct);
   tmr_brkdt_struct.deadtime = (uint8_t)deadtime_dtc;           /* 死区：DTC * 3.47ns */
@@ -126,22 +138,29 @@ void tmr1_pwm_init_ex(uint32_t freq_hz, uint16_t deadtime_dtc)
   tmr_interrupt_enable(TMR1, TMR_OVF_INT, TRUE);
   nvic_irq_enable(TMR1_OVF_TMR10_IRQn, 2, 0);
 
-  /* ---------- 9. CH4 中点触发源（G4 式同步点，暂不用 ADC） ----------
-   * 参照 G4 工程：CH4 用 PWM2 语义 + CCR=ARR-1（顶点前 1 点）产生触发事件。
-   * G4 是把 CH4 事件引到 ADC 注入；这里直接取"比较中断"本身：
-   *   CH4 = PWM_B（CNT>CCR 有效，等价 G4 PWM2）+ CCR4 = ARR-1
-   *   → 上坡计数匹配时刻 = 周期中点（顶点）前 1 个计数点
-   *   回调由 tmr1_pwm_set_midpoint_cb() 注册，每 PWM 周期一次
-   * 注：CH4 不映射 GPIO（oc_output_state=FALSE），纯内部事件，不影响三相互补。
+  /* ---------- 9. CH4：中点触发源（硬件直连 ADC 注入组） ----------
+   * 相位：CH4 = PWM_MODE_B + CCR4 = ARR-1
+   *   PWM_MODE_B 下 OC4REF 在 CNT > CCR4 时有效，于是：
+   *     上坡 CNT 从 ARR-1 走到 ARR  → OC4REF 由无效变有效 → 一次上升沿（顶点）
+   *     下坡 CNT 从 ARR 走回 ARR-1  → OC4REF 由有效变无效 → 一次下降沿
+   *   ADC 只检测上升沿，所以每个 PWM 周期正好触发一次，且正好在零矢量顶点。
+   *
+   * ⚠ oc_output_state 必须是 TRUE：
+   *   它对应寄存器里的 OC4E 位。OC4E=0 时，比较中断（CC4IF）照样能进，
+   *   但 OC4REF 内部信号不产生 —— 而 ADC 注入组触发的正是 OC4REF。
+   *   之前设成 FALSE，结果就是"中断能进、ADC 不触发、irq 一直是 0"。
+   *   CH4 没有做 gpio_pin_mux_config 映射，所以即使 OC4E=1 也不会有引脚输出，
+   *   不会干扰三相互补。
+   *
+   * 去向：OC4REF → ADC 注入组触发输入（ADC_PREEMPT_TRIG_TMR1CH4），全硬件完成。
    */
   tmr_output_struct.oc_mode = TMR_OUTPUT_CONTROL_PWM_MODE_B;
-  tmr_output_struct.oc_output_state = FALSE;          /* CH4 不输出，仅产生比较事件 */
-  tmr_output_struct.occ_output_state = FALSE;
+  tmr_output_struct.oc_output_state = TRUE;           /* 必须开：否则 OC4REF 不产生，ADC 收不到触发 */
+  tmr_output_struct.occ_output_state = FALSE;         /* 互补通道不用 */
   tmr_output_struct.oc_polarity = TMR_OUTPUT_ACTIVE_HIGH;
+  tmr_output_struct.occ_polarity = TMR_OUTPUT_ACTIVE_HIGH;
   tmr_output_channel_config(TMR1, TMR_SELECT_CHANNEL_4, &tmr_output_struct);
   tmr_channel_value_set(TMR1, TMR_SELECT_CHANNEL_4, (uint16_t)(s_pwm_arr - 1U));  /* 顶点前 1 点 */
-  tmr_interrupt_enable(TMR1, TMR_C4_INT, TRUE);
-  nvic_irq_enable(TMR1_CH_IRQn, 2, 0);
 }
 
 /**

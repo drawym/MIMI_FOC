@@ -68,6 +68,7 @@ set(SOURCES
     user/src/curr_adc.c
     user/src/usart_log.c
     user/src/foc_scope.c
+    user/src/vf_start.c
     user/src/app_key.c
     user/src/app_key_rtos.c
     user/key/flexible_button.c
