@@ -37,12 +37,8 @@
 #define TMR1_CH_V             2
 #define TMR1_CH_W             3
 
-void tmr1_pwm_init(void);                                /* 默认 10kHz + DTC=100(≈347ns) */
-void tmr1_pwm_init_ex(uint32_t freq_hz, uint16_t deadtime_dtc);
-void tmr1_pwm_set_ccr(uint8_t ch, uint16_t ccr);          /* 直接写比较值（FOC/SVPWM 直用） */
-void tmr1_pwm_set_duty(uint8_t ch, uint16_t permille);    /* 占空比 0~1000（千分比） */
-void tmr1_pwm_output_enable(confirm_state en);            /* OEN：输出总开关（急停/恢复） */
-void tmr1_pwm_set_update_cb(void (*cb)(void));            /* 注册 TMR1 上溢中断回调（每 PWM 周期调用一次，FOC 步进用） */
-void tmr1_pwm_set_midpoint_cb(void (*cb)(void));           /* 注册 CH4 比较中断回调（周期中点前 1 点触发，G4 式，每 PWM 周期一次） */
+void tmr1_pwm_init(void);                            /* 10kHz + 死区 ≈347ns */
+void tmr1_pwm_set_ccr(uint8_t ch, uint16_t ccr);     /* 写比较值（SVPWM 直接调用） */
+void tmr1_pwm_output_enable(confirm_state en);       /* OEN 总开关：急停时断开桥臂 */
 
 #endif /* __TMR1_PWM_H */

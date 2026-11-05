@@ -249,13 +249,12 @@ void ADC1_2_3_IRQHandler(void)
 }
 
 /**
-  * @brief  软件触发一次三相采样并阻塞等待（**仅供零点标定使用**）
-  * @note   运行期请勿调用：运行期由 TMR1_CH4 硬件触发 + ADC 中断自动完成，
-  *         这里再插一次软件触发会和硬件触发抢同一个注入组，数据会错位。
-  *         带等待上限，ADC 不响应时最多等约 30us 就返回（沿用上次数据）。
-  * @retval none
+  * @brief  软件触发一次三相采样并等待完成（仅零点标定使用，故设为 static）
+  * @note   运行期不要调用：正常采样由 TMR1_CH4 硬件触发 + ADC 中断完成，
+  *         这里再插一次软件触发会和硬件触发抢同一个注入组。
+  *         等待带次数上限，ADC 不响应时约 30us 后放弃，沿用上次数据。
   */
-void curr_adc_sample(void)
+static void curr_adc_sample(void)
 {
   uint32_t wait_cnt;   /* 剩余等待次数，递减到 0 即放弃 */
 
@@ -361,7 +360,7 @@ uint8_t curr_adc_calibrate(void)
 }
 
 /**
-  * @brief  取某相当前使用的零点码值（调试/打印用）
+  * @brief  取某相零点码值（调试打印用）
   */
 uint16_t curr_adc_get_offset_code(uint8_t phase)
 {
@@ -373,36 +372,21 @@ uint16_t curr_adc_get_offset_code(uint8_t phase)
 }
 
 /**
-  * @brief  取某相原始码值
-  */
-uint16_t curr_adc_get_raw(uint8_t phase)
-{
-  if(phase > CURR_PHASE_W)
-  {
-    return 0U;
-  }
-  return s_curr_raw[phase];
-}
-
-/**
-  * @brief  取某相电压（毫伏）
-  */
-uint16_t curr_adc_get_mv(uint8_t phase)
-{
-  return (uint16_t)(((uint32_t)curr_adc_get_raw(phase) * CURR_ADC_VREF_MV)
-                    / CURR_ADC_RES_MAX);
-}
-
-/**
-  * @brief  取某相电流（安，带符号：正=流出母线，负=回流）
-  *           I(mA) = (raw - offset) × VREF_mV × 1000 / (4095 × R × G)
+  * @brief  取某相电流（mA，带符号：正=流出桥臂，负=回流）
+  * @note   换算：mA = (raw − offset) × 33000 / 4095，1 码 ≈ 8.06mA。
+  *         分子最大 4095×33000 ≈ 1.35e8，int32 装得下。
+  * @retval 电流毫安值；phase 非法返回 0
   */
 int16_t curr_adc_get_amp(uint8_t phase)
 {
-  int32_t delta_code;   /* 相对零点的码值差：正=高于零点(正向电流)，负=低于零点 */
+  int32_t delta_code;   /* 相对零点的码值差 */
 
-  delta_code = (int32_t)curr_adc_get_raw(phase) - (int32_t)s_offset_code[phase];
+  if (phase > CURR_PHASE_W)
+  {
+    return 0;           /* 越界保护：一旦传错相号，读数组外会算出离谱电流 */
+  }
 
-  /* 分子最大 4095×33000 ≈ 1.35e8，在 int32 内，不会溢出 */
+  delta_code = (int32_t)s_curr_raw[phase] - (int32_t)s_offset_code[phase];
+
   return (int16_t)((delta_code * CURR_ADC_MA_SCALE) / (int32_t)CURR_ADC_RES_MAX);
 }

@@ -35,6 +35,16 @@ static volatile uint8_t s_motor_run = 0;   /* 0=停止  1=运行（按键线程�
 #define RUN_PHASE_VF        1U   /* V/F 开环强拖（10.5 秒） */
 #define RUN_PHASE_CLOSED    2U   /* 电流闭环 */
 
+/* ===== 启动方式选择 =====
+ * 0 = I/F 强拖（currloop0 自带的 预定位→斜坡升速→切闭环）
+ *     电流全程闭环，限流、转矩可控、切换平滑，工程上更常用。
+ *     ⚠ 前提：电流环带宽 ≥ 10 倍启动基波频率。
+ *       当前 122Hz vs 7Hz（60rpm），比值 17 倍，满足。
+ * 1 = V/F 电压开环（vf_start.c）
+ *     不依赖电流环，最鲁棒，但电流随负载漂移、带载易失步。
+ *     留作"电流环还没调好"时的保底手段。 */
+#define START_MODE_USE_VF    0
+
 static volatile uint8_t s_run_phase = RUN_PHASE_STOP;
 
 
@@ -94,6 +104,7 @@ static void foc_step(void)
      * 因为开环不依赖反馈，转子跟得上就转，跟不上的时也不会被错误反馈带偏。 */
     if (s_run_phase == RUN_PHASE_VF)
     {
+        
         vf_start_step();   /* 内部算角度、电压、SVPWM，直接写三相 CCR */
 
         if (vf_start_finished() != 0U)
@@ -162,8 +173,14 @@ static void b_on_key1_click(app_key_id_t key, flex_button_event_t event)
     (void)key;
     (void)event;
 
-    vf_start_begin();            /* 复位 VF 角度和计时，从预定位重新开始 */
-    s_run_phase = RUN_PHASE_VF;  /* 先进 VF 开环，10.5 秒后自动切闭环 */
+#if (START_MODE_USE_VF != 0)
+    vf_start_begin();            /* 复位 VF 角度和计时，从预定位开始 */
+    s_run_phase = RUN_PHASE_VF;  /* 先进 VF 开环，跑完自动切闭环 */
+#else
+    /* I/F 模式：什么都不用做，交给 currloop0 的状态机
+     * 它自己会走 IDLE → 预定位(0.3s) → 斜坡升速(3s) → 闭环 */
+    s_run_phase = RUN_PHASE_CLOSED;
+#endif
 
     rtU.v_bus = V_BUS_VOLT;      /* 母线电压 V */
     rtU.Motor_OnOff = 1.0f;      /* 模型判 Motor_OnOff == 1.0F，必须给精确值 */
